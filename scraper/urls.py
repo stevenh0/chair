@@ -25,5 +25,5 @@ urlpatterns = [
 	url(r'^$', RedirectView.as_view(url='console/', permanent=False)),
 	url(r'^console/', console, name='console'),
     path('admin/', admin.site.urls),
-    path('', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
