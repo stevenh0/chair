@@ -8,10 +8,18 @@ class OrderStatus(models.Model):
 
 
 class Customer(models.Model):
-    pass
+    customer_id = models.CharField()
+    firstname = models.CharField()
+    lastname = models.CharField()
+    county = models.CharField()
+    phone = models.CharField()
+    state = models.CharField()
+    street = models.CharField()
+    zip = models.CharField()
 
 
 class Order(models.Model):
+    order_id = models.CharField()
     status = models.CharField()
     shipped = models.BooleanField()
     tracking_id = models.CharField()
