@@ -18,7 +18,7 @@ import datetime
 # have to parse newegg_feed to get tracking_id -> update tracking_id on bestbuy side
 @login_required()
 def console(request):
-    return render(request, "console.html", context={"order_info": Order.objects.all()[:10]})
+    return render(request, "chair/dashboard.html", context={"order_info": Order.objects.all()[:10]})
 
 
 @login_required()
@@ -47,7 +47,8 @@ def update_tracking(request, order_id):
     if not 'error' in tracking_id:
         return JsonResponse({'status': 'error', 'message': 'tracking number has not been updated yet for this order'})
     headers = {'Authorization': BESTBUY_KEY}
-    tracking_data = {'carrier_code': CARRIER_CODE, 'tracking_number': tracking_id}
+    tracking_data = {'carrier_code': CARRIER_CODE,
+                     'tracking_number': tracking_id}
     requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order_id),
                  data=json.dumps(tracking_data), headers=headers)
     order.tracking_id = tracking_id

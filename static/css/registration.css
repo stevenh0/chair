@@ -1,0 +1,108 @@
+img {
+  width: 100%;
+}
+
+.logo-box {
+  margin-top: 8vh;
+  margin-bottom: 9vh;
+  color: #fff;
+}
+
+a.muted {
+  color: #38383d;
+}
+
+a.muted:hover {
+  color: #38383d;
+}
+
+.square-btn {
+  height: 50px;
+  width: 10px;
+}
+
+input {
+  background: rgba(74, 73, 87, 0.3);
+  border: none;
+  border-radius: 7px;
+  position: relative;
+  display: block;
+  outline: none;
+  width: 100%;
+  height: 60px;
+  margin: 0 auto;
+  padding: 10px;
+  color: #fff;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: dodgerBlue;
+  box-shadow: 0 0 8px 0 dodgerBlue;
+}
+
+.inputWithIcon input {
+  padding-left: 40px;
+}
+
+.inputWithIcon {
+  position: relative;
+}
+
+.inputWithIcon i {
+  position: absolute;
+  left: 5px;
+  top: 12px;
+  padding: 9px 8px;
+  color: #aaa;
+  transition: 0.3s;
+}
+
+.inputWithIcon input:focus + i {
+  color: dodgerBlue;
+}
+
+.landing-img {
+  position: relative;
+  background: url("../img/showcase.jpg") no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+.landing-inner {
+  padding-top: 80px;
+}
+
+.dark-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card-form {
+  opacity: 0.9;
+}
+
+.latest-profiles-img {
+  width: 40px;
+  height: 40px;
+}
+
+.form-control::placeholder {
+  color: #bbb !important;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

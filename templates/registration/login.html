@@ -1,37 +1,59 @@
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
+<div class="landing-img noselect">
+  <div class="dark-overlay landing-inner text-light">
+    <div class="container text-center">
+      {% if form.errors %}
+      <p>Your username and password didn't match. Please try again.</p>
+      {% endif %} {% if next %} {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+      {% endif %} {% endif %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="login">
+            <div class="container">
+              <div class="logo-box">
+                <i class="fa fa-truck fa-lg fa-5x fa-fw" aria-hidden="true"></i>
+                <i class="fa fa-archive fa-lg fa-3x fa-fw" aria-hidden="true"></i>
+              </div>
+              <div class="row">
+                <div class="col-md-5 m-auto">
+                  <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <div class="inputWithIcon">
+                        <td>{{ form.username }}</td>
+                        <i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="inputWithIcon">
+                        <td>{{ form.password }}</td>
+                        <i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i>
+                      </div>
+                    </div>
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+                    <div class="row">
+                      <div class="col-md-7 m-auto text-left">
+                        {# Assumes you setup the password_reset view in your URLconf #}
+                        <a class="muted" href="{% url 'password_reset' %}">Lost your password?</a>
+                      </div>
+                      <div class="col-md-5 m-auto">
+                        <input type="submit" value="Log In" class="square-btn btn btn-block mt-1" />
+                        <input type="hidden" name="next" value="{{ next }}" />
+                      </div>
+                    </div>
+                  </form>
+                  <div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-
-<div>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</div>
-
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
-{% endblock %}
+  {% endblock %}

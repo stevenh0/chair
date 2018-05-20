@@ -9,7 +9,8 @@ import json
 # date should be in format yyyy-MM-dd
 def grab_orders(date=None):
     headers = {'Authorization': BESTBUY_KEY}
-    r = requests.get('https://marketplace.bestbuy.ca/api/orders', {"start_date": date, "paginate": False}, headers=headers)
+    r = requests.get('https://marketplace.bestbuy.ca/api/orders',
+                     {"start_date": date, "paginate": False}, headers=headers)
     r_data = json.loads(r.content)
     orders = r_data.get('orders')
     for order in orders:
@@ -22,7 +23,8 @@ def grab_orders(date=None):
 def load_order(order_info):
     for item in order_info.get('order_lines'):
         product_name = item.get('product_title')
-        order, created = Order.objects.get_or_create(order_id=order_info.get('order_id'), product_name=product_name)
+        order, created = Order.objects.get_or_create(
+            order_id=order_info.get('order_id'), product_name=product_name)
         customer = update_customer_info(order_info.get('customer'))
         order.customer_id = customer
         order.status = order_info.get('order_state')
@@ -37,7 +39,8 @@ def load_order(order_info):
 
 
 def update_customer_info(customer_info):
-    customer, created = Customer.objects.get_or_create(customer_id=customer_info.get('customer_id'))
+    customer, created = Customer.objects.get_or_create(
+        customer_id=customer_info.get('customer_id'))
     customer.firstname = customer_info.get('firstname')
     customer.lastname = customer_info.get('lastname')
     try:
@@ -48,6 +51,7 @@ def update_customer_info(customer_info):
         customer.street = customer_info['shipping_address'].get('street_1')
         customer.zip = customer_info['shipping_address'].get('zip_code')
     except AttributeError:
-        print('could not parse customer {}, {}'.format(customer.customer_id, customer_info))
+        print('could not parse customer {}, {}'.format(
+            customer.customer_id, customer_info))
     customer.save()
     return customer
