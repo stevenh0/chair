@@ -1,4 +1,4 @@
-from secrets import NEWEGG_AUTH, NEWEGG_KEY
+from scraper.settings import NEWEGG_AUTH, NEWEGG_KEY
 import requests
 import json
 import datetime

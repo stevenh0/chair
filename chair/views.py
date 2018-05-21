@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import JsonResponse
 
-from secrets import BESTBUY_KEY, CARRIER_CODE
+from scraper.settings import BESTBUY_KEY, CARRIER_CODE
 from chair.models import Order, OrderStatus
 from chair.order_processing.bestbuy import grab_orders
 from chair.order_processing.newegg import get_newegg_tracking_id, newegg_ship
@@ -41,7 +41,8 @@ def newegg_fulfill(request, order_id):
     order = Order.objects.filter(order_id=order_id)
     for o in order:
         newegg_ship(o)
-    return redirect(reverse('dashboard'))
+        return JsonResponse(
+            {'status': 'success', 'message': 'shipment for order {} has been created'.format(order_id)})
 
 
 # update tracking information for an order - can't call this before shipping the order via newegg

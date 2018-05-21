@@ -25,7 +25,7 @@ SECRET_KEY = 'ucm&cd%$!c%ypiyzk*o_t+do-d+d$!hadjrgc%lu(lt+*px_3+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'localhost', '.herokuapp.com']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,10 +121,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = "/dashboard"
+
+#  variables
+try:
+    from secrets import BESTBUY_KEY, CARRIER_CODE, NEWEGG_KEY, NEWEGG_AUTH
+except:
+    BESTBUY_KEY = str(os.environ["BESTBUY_KEY"])
+    CARRIER_CODE = str(os.environ["CARRIER_CODE"])
+    NEWEGG_AUTH = str(os.environ["NEWEGG_AUTH"])
+    NEWEGG_KEY = str(os.environ["NEWEGG_KEY"])

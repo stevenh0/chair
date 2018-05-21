@@ -1,4 +1,4 @@
-from secrets import BESTBUY_KEY
+from scraper.settings import BESTBUY_KEY
 from chair.product_info import PRODUCT_INFO
 from chair.models import Order, Customer
 
