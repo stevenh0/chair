@@ -18,7 +18,12 @@ import datetime
 # have to parse newegg_feed to get tracking_id -> update tracking_id on bestbuy side
 @login_required()
 def dashboard(request):
-    return render(request, "chair/dashboard.html", context={"order_info": Order.objects.all()[:10]})
+    completed = Order.objects.filter(status='RECEIVED')
+    pending = Order.objects.filter(status='WAITING_ACCEPTANCE')
+    shipping = Order.objects.filter(status='SHIPPING')
+    cancelled = Order.objects.filter(status='CANCELLED')
+    return render(request, "chair/dashboard.html", context={'completed': completed, 'pending': pending,
+                                                            'shipping': shipping, 'cancelled': cancelled})
 
 
 @login_required()
@@ -28,6 +33,7 @@ def grab_latest_orders(request):
     grab_orders(date)
     settings.last_update = datetime.date.today().strftime('%Y/%m/%d')
     settings.save()
+    return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
 
 
 @login_required()
