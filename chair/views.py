@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import JsonResponse
+from django.db.models import Q
 
 from scraper.settings import BESTBUY_KEY, CARRIER_CODE
 from chair.models import Order, OrderStatus
@@ -18,12 +19,11 @@ import datetime
 # have to parse newegg_feed to get tracking_id -> update tracking_id on bestbuy side
 @login_required()
 def dashboard(request):
-    completed = Order.objects.filter(status='RECEIVED')
-    pending = Order.objects.filter(status='WAITING_ACCEPTANCE')
-    shipping = Order.objects.filter(status='SHIPPING')
-    cancelled = Order.objects.filter(status='CANCELLED')
-    return render(request, "chair/dashboard.html", context={'completed': completed, 'pending': pending,
-                                                            'shipping': shipping, 'cancelled': cancelled})
+    completed = Order.objects.filter(
+        Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
+    pending = Order.objects.filter(
+        Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING'))
+    return render(request, "chair/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending), 'completed_len': len(completed), 'pending_len': len(pending)})
 
 
 @login_required()

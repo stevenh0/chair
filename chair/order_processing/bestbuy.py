@@ -13,6 +13,8 @@ def grab_orders(date=None):
                      {"start_date": date, "paginate": False}, headers=headers)
     r_data = json.loads(r.content)
     orders = r_data.get('orders')
+    if not orders:
+        return 0
     for order in orders:
         # grab necessary fields for newegg stuff and enter them into the db
         load_order(order)
