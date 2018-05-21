@@ -30,7 +30,7 @@ def grab_latest_orders(request):
     settings = OrderStatus.objects.first()
     date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     updated = grab_orders(date)
-    settings.last_update = datetime.date.today().strftime('%Y/%m/%d')
+    settings.last_update = datetime.date.today().strftime('%Y-%m-%d')
     settings.save()
     if updated > 0:
         return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
@@ -51,6 +51,9 @@ def accept_order(request, order_id):
     r = process_order(order_id, True)
     if not r.status_code == 204:
         return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
+    # sync db with orders
+    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    grab_orders(date)
     return JsonResponse({'status': 'success', 'message': 'order {} has been accepted'.format(order_id)})
 
 
@@ -59,6 +62,9 @@ def reject_order(request, order_id):
     r = process_order(order_id, False)
     if not r.status_code == 204:
         return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
+    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    # sync db with orders
+    grab_orders(date)
     return JsonResponse({'status': 'success', 'message': 'order {} has been rejected'.format(order_id)})
 
 

@@ -29,3 +29,4 @@ class Order(models.Model):
     received = models.CharField(max_length=100, blank=True, null=True)
     part_number = models.CharField(max_length=100, blank=True, null=True)
     newegg_feed = models.CharField(max_length=100, blank=True, null=True)
+    order_line_id = models.CharField(max_length=100, blank=True, null=True)

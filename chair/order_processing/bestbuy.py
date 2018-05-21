@@ -33,6 +33,7 @@ def load_order(order_info):
         order.tracking_id = order_info.get('shipping_tracking')
         order.quantity = item.get('quantity')
         order.received = order_info.get('created_date')
+        order.order_line_id = item.get('order_line_id')
         try:
             order.part_number = PRODUCT_INFO.get(product_name)[1]
         except:
@@ -60,7 +61,7 @@ def update_customer_info(customer_info):
 
 
 def process_order(order_id, accept):
-    headers = {'Authorization': BESTBUY_KEY}
+    headers = {'Authorization': BESTBUY_KEY, 'Content-Type': 'application/json'}
     data = {
         "order_lines": [{
             "accepted": accept,
