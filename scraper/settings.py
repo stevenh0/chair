@@ -133,9 +133,9 @@ LOGIN_REDIRECT_URL = "/dashboard"
 
 #  variables
 try:
-    from secrets import *
+    from secrets import BESTBUY_KEY, CARRIER_CODE, NEWEGG_KEY, NEWEGG_AUTH
 except:
-    BESTBUY_KEY = str(os.getenv("BESTBUY_KEY"))
-    CARRIER_CODE = str(os.getenv("CARRIER_CODE"))
-    NEWEGG_AUTH = str(os.getenv("NEWEGG_AUTH"))
-    NEWEGG_KEY = str(os.getenv("NEWEGG_KEY"))
+    BESTBUY_KEY = str(os.environ("BESTBUY_KEY"))
+    CARRIER_CODE = str(os.environ("CARRIER_CODE"))
+    NEWEGG_AUTH = str(os.environ("NEWEGG_AUTH"))
+    NEWEGG_KEY = str(os.environ("NEWEGG_KEY"))

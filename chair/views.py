@@ -33,6 +33,7 @@ def grab_latest_orders(request):
     grab_orders(date)
     settings.last_update = datetime.date.today().strftime('%Y/%m/%d')
     settings.save()
+    return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
 
 
 @login_required()
@@ -40,7 +41,8 @@ def newegg_fulfill(request, order_id):
     order = Order.objects.filter(order_id=order_id)
     for o in order:
         newegg_ship(o)
-    return redirect(reverse('dashboard'))
+        return JsonResponse(
+            {'status': 'success', 'message': 'shipment for order {} has been created'.format(order_id)})
 
 
 # update tracking information for an order - can't call this before shipping the order via newegg
