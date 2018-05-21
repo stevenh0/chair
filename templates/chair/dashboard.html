@@ -127,14 +127,15 @@
     </div>
   </div>
 </div>
-<script src="{% static 'js/perfect-scrollbar.js' %}"></script>
 
+<script src="{% static 'js/perfect-scrollbar.js' %}"></script>
 <script>
-  $('.js-pscroll').each(() => {
+  $('.js-pscroll').each(function () {
     var ps = new PerfectScrollbar(this);
 
-    $(window).on('resize', () => {
+    $(window).on('resize', function () {
       ps.update();
     })
   });
+
 </script> {% endblock content %}
