@@ -130,3 +130,12 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = "/dashboard"
+
+#  variables
+try:
+    from secrets import *
+except:
+    BESTBUY_KEY = str(os.getenv("BESTBUY_KEY"))
+    CARRIER_CODE = str(os.getenv("CARRIER_CODE"))
+    NEWEGG_AUTH = str(os.getenv("NEWEGG_AUTH"))
+    NEWEGG_KEY = str(os.getenv("NEWEGG_KEY"))
