@@ -28,11 +28,13 @@ def dashboard(request):
 @login_required()
 def grab_latest_orders(request):
     settings = OrderStatus.objects.first()
-    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y/%m/%d')
-    grab_orders(date)
+    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    updated = grab_orders(date)
     settings.last_update = datetime.date.today().strftime('%Y/%m/%d')
     settings.save()
-    return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
+    if updated > 0:
+        return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
+    return JsonResponse({'status': 'failure', 'message': 'no new orders'})
 
 
 @login_required()
