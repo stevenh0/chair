@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.http import JsonResponse
 
 from scraper.settings import BESTBUY_KEY, CARRIER_CODE
 from chair.models import Order, OrderStatus
-from chair.order_processing.bestbuy import grab_orders
+from chair.order_processing.bestbuy import grab_orders, process_order
 from chair.order_processing.newegg import get_newegg_tracking_id, newegg_ship
 
 import requests
@@ -29,8 +28,8 @@ def dashboard(request):
 @login_required()
 def grab_latest_orders(request):
     settings = OrderStatus.objects.first()
-    # date = settings.last_update
-    grab_orders()
+    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y/%m/%d')
+    grab_orders(date)
     settings.last_update = datetime.date.today().strftime('%Y/%m/%d')
     settings.save()
     return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
@@ -43,6 +42,22 @@ def newegg_fulfill(request, order_id):
         newegg_ship(o)
         return JsonResponse(
             {'status': 'success', 'message': 'shipment for order {} has been created'.format(order_id)})
+
+
+@login_required()
+def accept_order(request, order_id):
+    r = process_order(order_id, True)
+    if not r.status_code == 204:
+        return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
+    return JsonResponse({'status': 'success', 'message': 'order {} has been accepted'.format(order_id)})
+
+
+@login_required()
+def reject_order(request, order_id):
+    r = process_order(order_id, False)
+    if not r.status_code == 204:
+        return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
+    return JsonResponse({'status': 'success', 'message': 'order {} has been rejected'.format(order_id)})
 
 
 # update tracking information for an order - can't call this before shipping the order via newegg
