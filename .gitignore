@@ -1,7 +1,9 @@
 *.pyc
 *~
 __pycache__
-myvenv/
+myvenv
+venv
+.vscode
 db.sqlite3
 .DS_Store
 secrets.py
