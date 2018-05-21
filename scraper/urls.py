@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='dashboard/', permanent=False)),
     url(r'^dashboard/$', dashboard, name='dashboard'),
     url(r'^orders/grab_latest/$', grab_latest_orders, name='grab_latest_orders'),
+    url(r'^orders/accept/(?P<order_id>[-_a-zA-Z0-9]+)/$', accept_order, name='accept_order'),
+    url(r'^orders/reject/(?P<order_id>[-_a-zA-Z0-9]+)/$', reject_order, name='reject_order'),
     url(r'^orders/newegg_fulfill/(?P<order_id>[-_a-zA-Z0-9]+)/$',
         newegg_fulfill, name='newegg_fulfill'),
     url(r'^orders/update_tracking/(?P<order_id>[-_a-zA-Z0-9]+)/$',

@@ -22,7 +22,7 @@ class Customer(models.Model):
 class Order(models.Model):
     order_id = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=100, blank=True, null=True)
-    tracking_id = models.CharField(max_length=100, blank=True, null=True)
+    tracking_id = models.CharField(max_length=200, blank=True, null=True)
     customer_id = models.ForeignKey('Customer', on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.CharField(max_length=100, blank=True, null=True)
     product_name = models.CharField(max_length=100, blank=True, null=True)
