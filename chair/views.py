@@ -17,7 +17,7 @@ import datetime
 # have option to fulfill order - user clicks fulfill = send newegg shipment -> returns newegg_feed
 # have to parse newegg_feed to get tracking_id -> update tracking_id on bestbuy side
 @login_required()
-def console(request):
+def dashboard(request):
     return render(request, "chair/dashboard.html", context={"order_info": Order.objects.all()[:10]})
 
 
@@ -35,7 +35,7 @@ def newegg_fulfill(request, order_id):
     order = Order.objects.filter(order_id=order_id)
     for o in order:
         newegg_ship(o)
-    return redirect(reverse('console'))
+    return redirect(reverse('dashboard'))
 
 
 # update tracking information for an order - can't call this before shipping the order via newegg

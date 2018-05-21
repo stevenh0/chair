@@ -1,7 +1,107 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'utils/perfect-scrollbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'utils/select2.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'utils/animate.css' %}">
 
-<div class="test">
-  ease glap
+
+
+<div class="landing-img noselect">
+  <div class="dark-overlay landing-inner text-light">
+
+    <div class="limiter">
+      <div class="container-table100">
+        <div class="wrap-table100">
+          <div class="table100 ver1 m-b-110">
+            <div class="table100-head">
+              <table>
+                <thead>
+                  <tr class="row100 head">
+                    <th class="cell100 column1">Order No.</th>
+                    <th class="cell100 column2">Item</th>
+                    <th class="cell100 column3">Order Date</th>
+                    <th class="cell100 column4">Customer Name</th>
+                    <th class="cell100 column5">Store</th>
+                    <th class="cell100 column6"></th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div class="table100-body js-pscroll">
+              <table>
+                <tbody>
+                  <tr class="row100 body">
+                    <td class="cell100 column1">Kappa 123</td>
+                    <td class="cell100 column2">Red Chair</td>
+                    <td class="cell100 column3">May 20, 2018 - 12:00</td>
+                    <td class="cell100 column4">Aaron Chapman</td>
+                    <td class="cell100 column5">Best Buy</td>
+                    <td class="cell100 column6">
+                      <input type="submit" value="Ship" class="btn btn-primary btn-block mt-1" />
+                    </td>
+                  </tr>
+                  <tr class="row100 body">
+                    <td class="cell100 column1">Kappa 123</td>
+                    <td class="cell100 column2">Red Chair</td>
+                    <td class="cell100 column3">May 20, 2018 - 12:00</td>
+                    <td class="cell100 column4">Aaron Chapman</td>
+                    <td class="cell100 column5">Best Buy</td>
+                    <td class="cell100 column6">
+                      <input type="submit" value="Ship" class="btn btn-primary btn-block mt-1" />
+                    </td>
+                  </tr>
+                  <tr class="row100 body">
+                    <td class="cell100 column1">Kappa 123</td>
+                    <td class="cell100 column2">Red Chair</td>
+                    <td class="cell100 column3">May 20, 2018 - 12:00</td>
+                    <td class="cell100 column4">Aaron Chapman</td>
+                    <td class="cell100 column5">Best Buy</td>
+                    <td class="cell100 column6">
+                      <input type="submit" value="Ship" class="btn btn-primary btn-block mt-1" />
+                    </td>
+                  </tr>
+                  <tr class="row100 body">
+                    <td class="cell100 column1">Kappa 123</td>
+                    <td class="cell100 column2">Red Chair</td>
+                    <td class="cell100 column3">May 20, 2018 - 12:00</td>
+                    <td class="cell100 column4">Aaron Chapman</td>
+                    <td class="cell100 column5">Best Buy</td>
+                    <td class="cell100 column6">
+                      <input type="submit" value="Ship" class="btn btn-primary btn-block mt-1" />
+                    </td>
+                  </tr>
+                  <tr class="row100 body">
+                    <td class="cell100 column1">Kappa 123</td>
+                    <td class="cell100 column2">Red Chair</td>
+                    <td class="cell100 column3">May 20, 2018 - 12:00</td>
+                    <td class="cell100 column4">Aaron Chapman</td>
+                    <td class="cell100 column5">Best Buy</td>
+                    <td class="cell100 column6">
+                      <input type="submit" value="Ship" class="btn btn-primary btn-block mt-1" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
-{% endblock content %}
+
+<script src="{% static 'js/select2.js' %}"></script>
+
+<script src="{% static 'js/perfect-scrollbar.js' %}"></script>
+<script>
+  $('.js-pscroll').each(function () {
+    var ps = new PerfectScrollbar(this);
+
+    $(window).on('resize', function () {
+      ps.update();
+    })
+  });
+
+</script> {% endblock content %}

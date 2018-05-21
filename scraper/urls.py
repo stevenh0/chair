@@ -22,11 +22,13 @@ from django.views.generic import RedirectView
 from chair.views import *
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url='console/', permanent=False)),
-    url(r'^console/$', console, name='console'),
+    url(r'^$', RedirectView.as_view(url='dashboard/', permanent=False)),
+    url(r'^dashboard/$', dashboard, name='dashboard'),
     url(r'^orders/grab_latest/$', grab_latest_orders, name='grab_latest_orders'),
-    url(r'^orders/newegg_fulfill/(?P<order_id>[-_a-zA-Z0-9]+)/$', newegg_fulfill, name='newegg_fulfill'),
-    url(r'^orders/update_tracking/(?P<order_id>[-_a-zA-Z0-9]+)/$', update_tracking, name='update_tracking'),
+    url(r'^orders/newegg_fulfill/(?P<order_id>[-_a-zA-Z0-9]+)/$',
+        newegg_fulfill, name='newegg_fulfill'),
+    url(r'^orders/update_tracking/(?P<order_id>[-_a-zA-Z0-9]+)/$',
+        update_tracking, name='update_tracking'),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

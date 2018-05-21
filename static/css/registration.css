@@ -1,3 +1,14 @@
+@font-face {
+  font-family: Lato-Regular;
+  src: url("../fonts/Lato/Lato-Regular.ttf");
+}
+
+@font-face {
+  font-family: Lato-Bold;
+  src: url("../fonts/Lato/Lato-Bold.ttf");
+}
+
+/* ------------------------------------ */
 img {
   width: 100%;
 }
@@ -65,7 +76,7 @@ input:focus {
 
 .landing-img {
   position: relative;
-  background: url("../img/showcase.jpg") no-repeat;
+  background: url("../img/background.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
