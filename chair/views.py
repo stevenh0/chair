@@ -29,8 +29,8 @@ def dashboard(request):
 @login_required()
 def grab_latest_orders(request):
     settings = OrderStatus.objects.first()
-    date = settings.last_update
-    grab_orders(date)
+    # date = settings.last_update
+    grab_orders()
     settings.last_update = datetime.date.today().strftime('%Y/%m/%d')
     settings.save()
     return JsonResponse({'status': 'success', 'message': 'orders have been updated'})
