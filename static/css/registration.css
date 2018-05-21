@@ -76,7 +76,7 @@ input:focus {
 
 .landing-img {
   position: relative;
-  background: url("../img/showcase.jpg") no-repeat;
+  background: url("../img/background.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
