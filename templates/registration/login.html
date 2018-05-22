@@ -1,6 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %} {% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}"> {% endblock %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
 <div class="landing-img noselect">
   <div class="dark-overlay landing-inner text-light">
     <div class="container text-center">
