@@ -1,12 +1,12 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block stylesheet %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'utils/perfect-scrollbar.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'utils/select2.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'utils/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'utils/animate.css' %}"> {% endblock %} {% block content %}
 
 <div class="landing-img noselect">
 
-  <div class="limiter">
+  <div class="limiter ">
 
     <div class="container-table100">
       <div class="wrap-table100">
@@ -40,19 +40,19 @@
                   {% if order.status == 'SHIPPING' %}
                   <td class="cell100 column6">Shipping</td>
                   <td class="cell100 column7">
-                    <button class="btn btn-primary" />Send
+                    <button class="btn-send btn btn-primary" />Send
                     <i class="fa fa-send fa-fw" aria-hidden="true" />
                   </td>
                   {% else %} {% if order.status == 'WAITING_ACCEPTANCE' %}
                   <td class="cell100 column6">Awaiting Accept</td>
                   <td class="cell100 column7">
-                    <button class="btn btn-success" />Accept
+                    <button class="btn-accept btn btn-success" />Accept
                     <i class="fa fa-check fa-fw" aria-hidden="true" />
                   </td>
                   {% else %} {% if order.status == 'WAITING_DEBIT_PAYMENT' %}
                   <td class="cell100 column6">Awaiting Debit</td>
                   <td class="cell100 column7">
-                    3 Hours Ago
+
                   </td> {% endif %} {% endif %} {% endif %}
 
                 </tr>
@@ -104,7 +104,7 @@
                   {% endif %} {% endif %} {% endif %} {% endif %}
 
                   <td class="cell100 column7">
-                    <button class="btn btn-dark" />Details
+                    <button class="btn-details btn btn-dark" />Details
                     <i class="fa fa-caret-down fa-fw" aria-hidden="true" />
                   </td>
                 </tr>
@@ -119,11 +119,13 @@
   </div>
 </div>
 
-
+{% endblock content %} {% block javascript %}
 
 <script src="{% static 'js/select2.js' %}"></script>
 <script src="{% static 'js/perfect-scrollbar.js' %}"></script>
 <script>
+
+  // Custom Scrollbar - NECESSARY
   $('.js-pscroll').each(function () {
     var ps = new PerfectScrollbar(this);
 
@@ -132,4 +134,55 @@
     })
   });
 
-</script> {% endblock content %}
+  // Accept Button
+  $(".btn-accept").click(function (e) {
+    e.preventDefault();
+    var order_id = $(this).parent().siblings("td.cell100.column1").html();
+
+    $.ajax({
+      type: 'GET',
+      url: '../orders/accept/' + order_id + '/',
+      success: function () {
+        // On Success
+      },
+      error: function () {
+        // cry for help
+      }
+    }).done(function (msg) {
+      console.log(msg);
+    });
+  });
+
+  // Details Button
+  $(".btn-details").click(function () {
+    var order_id = $(this).parent().siblings("td.cell100.column1").html();
+    console.log('details with... ' + order_id)
+    // $.ajax({
+    //   type: 'GET',
+    //   url: '../orders/accept/' + order_id + '/',
+    //   success: function () {
+    //     console.log('success')
+    //   },
+    //   error: function () {
+    //     console.log('error')
+    //   }
+    // });
+  });
+
+  // Update Tracking Info Button
+  $(".btn-send").click(function () {
+    var order_id = $(this).parent().siblings("td.cell100.column1").html();
+    console.log('send with... ' + order_id)
+    // $.ajax({
+    //   type: 'GET',
+    //   url: '../orders/accept/' + order_id + '/',
+    //   success: function () {
+    //     console.log('success')
+    //   },
+    //   error: function () {
+    //     console.log('error')
+    //   }
+    // });
+  });
+
+</script> {% endblock %}
