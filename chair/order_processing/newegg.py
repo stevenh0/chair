@@ -11,10 +11,10 @@ def newegg_ship(order):
     newegg_json = get_newegg_order(order)
     headers = {'Authorization': NEWEGG_AUTH, 'SecretKey': NEWEGG_KEY,
                'Content-Type': 'application/json', 'Accept': 'application/json'}
-    r = requests.post('https://api.newegg.com/marketplace/can/datafeedmgmt/feeds/submitfeed?sellerid={}&requesttype=MultiChannel_Orer_DATA'.format(SELLER_ID),
+    r = requests.post('https://api.newegg.com/marketplace/can/datafeedmgmt/feeds/submitfeed?sellerid={}&requesttype=MultiChannel_Order_DATA'.format(SELLER_ID),
                       headers=headers, data=json.dumps(newegg_json))
     try:
-        feed_id = json.loads(r)['ResponseBody']['ResponseList'][0]['RequestId']
+        feed_id = json.loads(r.content)['ResponseBody']['ResponseList'][0]['RequestId']
         order.newegg_feed = feed_id
         order.save()
     except:
@@ -41,29 +41,30 @@ def get_newegg_order(order):
     customer = order.customer_id
     today = datetime.date.today().strftime('%m/%d/%Y')
     channel = "PulseLabz"
-    shipping = "CAN Ground(2-7 Business Days)"
+    shipping = get_shipping_type(order)
     newegg = {
-        "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-        "Header": { "DocumentVersion": "1.0" },
-        "MessageType": "MultiChannelOrderCreation",
-        "Message": {
-            "MultiChannelOrder": {
-                "Order": {
-                    "OrderDate": today,
-                    "SalesChannel": channel,
-                    "SellerOrderID": order.order_id,
-                    "ShippingMethod": shipping,
-                    "ShipToFirstName": customer.firstname,
-                    "ShipToLastName": customer.lastname,
-                    "ShipToAddressLine1": customer.street,
-                    "ShipToCity": customer.city,
-                    "ShipToState": customer.state,
-                    "ShipToPostalCode": customer.zip,
-                    "ShipToCountry": customer.country,
-                    "ShipToPhoneNumber": customer.phone,
-                    "ItemList": {
-                        "Item": {"SellerPartNumber": order.part_number,
-                                 "Quantity": order.quantity}
+        "NeweggEnvelope": {
+            "Header": {"DocumentVersion": "1.0"},
+            "MessageType": "MultiChannelOrderCreation",
+            "Message": {
+                "MultiChannelOrder": {
+                    "Order": {
+                        "OrderDate": today,
+                        "SalesChannel": channel,
+                        "SellerOrderID": order.order_id,
+                        "ShippingMethod": shipping,
+                        "ShipToFirstName": customer.firstname,
+                        "ShipToLastName": customer.lastname,
+                        "ShipToAddressLine1": customer.street,
+                        "ShipToCity": customer.city,
+                        "ShipToState": customer.state,
+                        "ShipToPostalCode": customer.zip,
+                        "ShipToCountry": customer.country,
+                        "ShipToPhoneNumber": customer.phone,
+                        "ItemList": {
+                            "Item": [{"SellerPartNumber": order.part_number,
+                                     "Quantity": order.quantity}]
+                        }
                     }
                 }
             }
@@ -71,3 +72,16 @@ def get_newegg_order(order):
     }
     return newegg
 
+
+def get_shipping_type(order):
+    if order.customer_id.country == 'Canada':
+        if 'Express' in order.shipping_type:
+            shipping = "CAN Express (2-5 Business Days)"
+        elif 'Regular' in order.shipping_type:
+            shipping = "CAN Ground (2-7 Business Days)"
+    else:
+        if 'Express' in order.shipping_type:
+            shipping = "Expedited Shipping (3-5 Business Days)"
+        elif 'Regular' in order.shipping_type:
+            shipping = "Standard Shipping (2-7 Business Days)"
+    return shipping
