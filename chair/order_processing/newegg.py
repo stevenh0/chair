@@ -7,7 +7,6 @@ from chair.models import Order
 SELLER_ID = 'AFG1'
 
 
-# TODO: actual newegg request here
 def newegg_ship(order):
     newegg_json = get_newegg_order(order)
     headers = {'Authorization': NEWEGG_AUTH, 'SecretKey': NEWEGG_KEY,
@@ -17,6 +16,7 @@ def newegg_ship(order):
     try:
         feed_id = json.loads(r.content)['ResponseBody']['ResponseList'][0]['RequestId']
         order.newegg_feed = feed_id
+        order.newegg_shipped = True
         order.save()
     except:
         return {'error': 'shipping failed for order {}'.format(order.order_id)}
