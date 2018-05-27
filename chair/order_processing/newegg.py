@@ -2,6 +2,7 @@ from scraper.settings import NEWEGG_AUTH, NEWEGG_KEY
 import requests
 import json
 import datetime
+from chair.models import Order
 
 SELLER_ID = 'AFG1'
 
@@ -63,7 +64,7 @@ def get_newegg_order(order):
                         "ShipToPhoneNumber": customer.phone,
                         "ItemList": {
                             "Item": [{"SellerPartNumber": order.part_number,
-                                     "Quantity": order.quantity}]
+                                      "Quantity": order.quantity}]
                         }
                     }
                 }
@@ -85,3 +86,56 @@ def get_shipping_type(order):
         elif 'Regular' in order.shipping_type:
             shipping = "Standard Shipping (2-7 Business Days)"
     return shipping
+
+
+# request report to get shipping id
+def get_report():
+    headers = {'Authorization': NEWEGG_AUTH, 'SecretKey': NEWEGG_KEY,
+               'Content-Type': 'application/json', 'Accept': 'application/json'}
+    data = {
+        "OperationType": "OrderListReportRequest",
+        "RequestBody": {
+            "OrderReportCriteria": {
+                "RequestType": "ORDER_LIST_REPORT",
+                "KeywordsType": "0",
+                "Status": "2",
+                "Type": "0",
+            }
+        }
+    }
+    r = requests.post('https://api.newegg.com/marketplace/reportmgmt/report/submitrequest?sellerid=AFG1',
+                      data=json.dumps(data), headers=headers)
+    try:
+        request_id = json.loads(r.content)['ResponseBody']['ResponseList'][0]['RequestId']
+    except:
+        return 'error in requesting report'
+    return request_id
+
+
+def parse_report(report_id):
+    headers = {'Authorization': NEWEGG_AUTH, 'SecretKey': NEWEGG_KEY,
+               'Content-Type': 'application/json', 'Accept': 'application/json'}
+    data = {
+        "OperationType": "OrderListReportRequest",
+        "RequestBody": {
+            "RequestID": report_id,
+            "PageInfo": {
+                "PageSize": "10",
+                "PageIndex": "1"
+            }
+        }
+    }
+    r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
+                     headers=headers, data=json.dumps(data))
+    orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
+    for order in orders:
+        try:
+            ord = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
+            tracking_id = order['PackageInfoList'][0]['TrackingNumber']
+            carrier = order['PackageInfoList'][0]['ShipCarrier']
+            carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
+            ord.carrier = carrier
+            ord.tracking_id = tracking_id
+            ord.save()
+        except:
+            print('tracking id not yet ready for order {}').format(order['SellerOrderNumber'])

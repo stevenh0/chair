@@ -77,7 +77,7 @@ def update_tracking(request, order_id):
     if not 'error' in tracking_id:
         return JsonResponse({'status': 'error', 'message': 'tracking number has not been updated yet for this order'})
     headers = {'Authorization': BESTBUY_KEY}
-    tracking_data = {'carrier_code': CARRIER_CODE,
+    tracking_data = {'carrier_code': order.carrier_code,
                      'tracking_number': tracking_id}
     requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order_id),
                  data=json.dumps(tracking_data), headers=headers)

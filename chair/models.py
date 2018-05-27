@@ -23,6 +23,7 @@ class Order(models.Model):
     order_id = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=100, blank=True, null=True)
     tracking_id = models.CharField(max_length=200, blank=True, null=True)
+    carrier_code = models.CharField(max_length=200, blank=True, null=True)
     customer_id = models.ForeignKey('Customer', on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.CharField(max_length=100, blank=True, null=True)
     product_name = models.CharField(max_length=100, blank=True, null=True)
@@ -31,3 +32,8 @@ class Order(models.Model):
     newegg_feed = models.CharField(max_length=100, blank=True, null=True)
     order_line_id = models.CharField(max_length=100, blank=True, null=True)
     shipping_type = models.CharField(max_length=100, blank=True, null=True)
+
+
+class Report(models.Model):
+    request_id = models.CharField(max_length=100, blank=True, null=True)
+    processed = models.BooleanField(default=False)
