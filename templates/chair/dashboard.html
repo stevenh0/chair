@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block stylesheet %}
+{% extends 'base.html' %} {% load static %} {% load filters %} {% block stylesheet %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'utils/perfect-scrollbar.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'utils/select2.css' %}">
@@ -32,7 +32,7 @@
                 {% for order in pending %}
                 <tr class="row100 body">
                   <td class="cell100 column1">{{ order.order_id }}</td>
-                  <td class="cell100 column2">{{ order.received }}</td>
+                  <td class="cell100 column2">{{ order.received | date_formater }}</td>
                   <td class="cell100 column3">{{ order.part_number }}</td>
                   <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
                   {% if order.customer_id.state == 'BC' %}
@@ -95,26 +95,28 @@
                 {% for order in completed %}
                 <tr class="row100 body">
                   <td class="cell100 column1">{{ order.order_id }}</td>
-                  <td class="cell100 column2">{{ order.received }}</td>
+                  <td class="cell100 column2">{{ order.received | date_formater }}</td>
                   <td class="cell100 column3">{{ order.part_number }}</td>
                   <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
                   {% if order.customer_id.state == 'BC' %}
-                  <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                  <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}
+                    <i class="fa fa-home fa-fw " aria-hidden="true " />
+                  </td>
                   {% else %}
-                  <td class="cell100 column5">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                  <td class="cell100 column5 ">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
                   {% endif %} {% if order.status == 'RECEIVED' %}
-                  <td class="cell100 column6" style="color: #28a745">Received</td>
+                  <td class="cell100 column6 " style="color: #28a745">Received</td>
                   {% else %} {% if order.status == 'CANCELED' %}
-                  <td class="cell100 column6" style="color: #dc3545">CANCELED</td>
+                  <td class="cell100 column6 " style="color: #dc3545">CANCELED</td>
                   {% else %} {% if order.status == 'CLOSED' %}
-                  <td class="cell100 column6" style="color: #dc3545">Closed</td>
+                  <td class="cell100 column6 " style="color: #dc3545">Closed</td>
                   {% else %} {% if order.status == 'REFUSED' %}
-                  <td class="cell100 column6" style="color: #dc3545">Refused</td>
+                  <td class="cell100 column6 " style="color: #dc3545">Refused</td>
                   {% endif %} {% endif %} {% endif %} {% endif %}
 
-                  <td class="cell100 column7">
-                    <button class="btn-details btn btn-dark" />Details
-                    <i class="fa fa-caret-down fa-fw" aria-hidden="true" />
+                  <td class="cell100 column7 ">
+                    <button class="btn-details btn btn-dark " />Details
+                    <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
                   </td>
                 </tr>
                 {% endfor %}
@@ -130,8 +132,8 @@
 
 {% endblock content %} {% block javascript %}
 
-<script src="{% static 'js/select2.js' %}"></script>
-<script src="{% static 'js/perfect-scrollbar.js' %}"></script>
+<script src="{% static 'js/select2.js' %} "></script>
+<script src="{% static 'js/perfect-scrollbar.js' %} "></script>
 <script>
 
   // Custom Scrollbar - NECESSARY
@@ -144,9 +146,9 @@
   });
 
   // Accept Button
-  $(".btn-accept").click(function (e) {
+  $(".btn-accept ").click(function (e) {
     e.preventDefault();
-    var order_id = $(this).parent().siblings("td.cell100.column1").html();
+    var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
 
     $.ajax({
       type: 'GET',
@@ -163,8 +165,8 @@
   });
 
   // Details Button
-  $(".btn-details").click(function () {
-    var order_id = $(this).parent().siblings("td.cell100.column1").html();
+  $(".btn-details ").click(function () {
+    var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
     console.log('details with... ' + order_id)
     // $.ajax({
     //   type: 'GET',
@@ -179,8 +181,8 @@
   });
 
   // Update Tracking Info Button
-  $(".btn-send").click(function () {
-    var order_id = $(this).parent().siblings("td.cell100.column1").html();
+  $(".btn-send ").click(function () {
+    var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
     console.log('send with... ' + order_id)
     // $.ajax({
     //   type: 'GET',
