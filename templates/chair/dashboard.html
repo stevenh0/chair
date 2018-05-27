@@ -35,15 +35,23 @@
                   <td class="cell100 column2">{{ order.received }}</td>
                   <td class="cell100 column3">{{ order.part_number }}</td>
                   <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
+                  {% if order.customer_id.state == 'BC' %}
+                  <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                  {% else %}
                   <td class="cell100 column5">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-
-                  {% if order.status == 'SHIPPING' %}
-                  <td class="cell100 column6">Shipping</td>
+                  {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
+                  <td class="cell100 column6">Shipped</td>
+                  <td class="cell100 column7">
+                    <button class="btn btn-details btn-primary" />Details
+                    <i class="fa fa-caret-down fa-fw" aria-hidden="true" />
+                  </td>
+                  {% else %}
+                  <td class="cell100 column6">Debited</td>
                   <td class="cell100 column7">
                     <button class="btn-send btn btn-primary" />Send
                     <i class="fa fa-send fa-fw" aria-hidden="true" />
                   </td>
-                  {% else %} {% if order.status == 'WAITING_ACCEPTANCE' %}
+                  {% endif %} {% else %} {% if order.status == 'WAITING_ACCEPTANCE' %}
                   <td class="cell100 column6">Awaiting Accept</td>
                   <td class="cell100 column7">
                     <button class="btn-accept btn btn-success" />Accept
@@ -52,7 +60,6 @@
                   {% else %} {% if order.status == 'WAITING_DEBIT_PAYMENT' %}
                   <td class="cell100 column6">Awaiting Debit</td>
                   <td class="cell100 column7">
-
                   </td> {% endif %} {% endif %} {% endif %}
 
                 </tr>
@@ -91,9 +98,11 @@
                   <td class="cell100 column2">{{ order.received }}</td>
                   <td class="cell100 column3">{{ order.part_number }}</td>
                   <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
+                  {% if order.customer_id.state == 'BC' %}
+                  <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                  {% else %}
                   <td class="cell100 column5">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-
-                  {% if order.status == 'RECEIVED' %}
+                  {% endif %} {% if order.status == 'RECEIVED' %}
                   <td class="cell100 column6" style="color: #28a745">Received</td>
                   {% else %} {% if order.status == 'CANCELED' %}
                   <td class="cell100 column6" style="color: #dc3545">CANCELED</td>
