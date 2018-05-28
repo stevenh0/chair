@@ -42,8 +42,9 @@ def newegg_fulfill(request, order_id):
     order = Order.objects.filter(order_id=order_id)
     for o in order:
         newegg_ship(o)
-        return JsonResponse(
-            {'status': 'success', 'message': 'shipment for order {} has been created'.format(order_id)})
+    order.update(newegg_shipped=True)
+    return JsonResponse(
+        {'status': 'success', 'message': 'shipment for order {} has been created'.format(order_id)})
 
 
 @login_required()
@@ -52,8 +53,10 @@ def accept_order(request, order_id):
     if not r.status_code == 204:
         return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
     # sync db with orders
-    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
-    grab_orders(date)
+    # date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    # grab_orders(date)
+    order = Order.objects.filter(order_id=order_id)
+    order.update(status='WAITING_DEBIT_PAYMENT')
     return JsonResponse({'status': 'success', 'message': 'order {} has been accepted'.format(order_id)})
 
 
@@ -62,9 +65,11 @@ def reject_order(request, order_id):
     r = process_order(order_id, False)
     if not r.status_code == 204:
         return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
-    date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    # date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     # sync db with orders
-    grab_orders(date)
+    # grab_orders(date)
+    order = Order.objects.filter(order_id=order_id)
+    order.update(status='REFUSED')
     return JsonResponse({'status': 'success', 'message': 'order {} has been rejected'.format(order_id)})
 
 
