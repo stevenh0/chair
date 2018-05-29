@@ -19,7 +19,7 @@
             <tbody>
                 {% for order in pending %}
                 <tr>
-                    <td>{{ order.order_id }}</td>
+                    <td class="order_id">{{ order.order_id }}</td>
                     <td>{{ order.received | date_formater }}</td>
                     <td>{{ order.part_number }}</td>
                     <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
@@ -30,8 +30,13 @@
                     {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
                     <td>Shipped</td>
                     <td>{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
-                    <td>
-                        <button class="btn btn-details btn-tracking btn-primary">Get Tracking</button>
+                    <td>{% if not order.tracking %}
+                        <button class="btn btn-details btn-tracking btn-primary">Req Report</button>
+                        {% elif not order.bestbuy_filled %}
+                        <button class="btn btn-details btn-bestbuy-tracking btn-primary">Update Tracking</button>
+                        {% else %}
+                        Bestbuy Updated
+                        {% endif %}
                     </td>
                     {% else %}
                     <td>Debited</td>
@@ -89,7 +94,7 @@
             <tbody>
                 {% for order in completed %}
                 <tr class="row100 body">
-                    <td>{{ order.order_id }}</td>
+                    <td class="order_id">{{ order.order_id }}</td>
                     <td>{{ order.received | date_formater }}</td>
                     <td>{{ order.part_number }}</td>
                     <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
@@ -197,7 +202,7 @@
     // Accept Button
     $(".btn-accept ").click(function (e) {
         e.preventDefault();
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
 
         $.ajax({
             type: 'GET',
@@ -216,7 +221,7 @@
 
     // Details Button
     $(".btn-details ").click(function () {
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
         console.log('details with... ' + order_id)
         // $.ajax({
         //   type: 'GET',
@@ -232,7 +237,7 @@
 
     // Send order via newegg
     $(".btn-send ").click(function () {
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
         $.ajax({
             type: 'GET',
             url: '../orders/newegg_fulfill/' + order_id + '/'
@@ -261,7 +266,7 @@
             type: 'GET',
             url: '../orders/parse_report/' + report_id + '/',
             error: function () {
-                console.log("I broke");
+                alert("Report not ready for processing");
             }
         }).done(function (msg) {
             location.reload();

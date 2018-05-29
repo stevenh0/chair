@@ -33,6 +33,7 @@ class Order(models.Model):
     newegg_feed = models.CharField(max_length=100, blank=True, null=True)
     order_line_id = models.CharField(max_length=100, blank=True, null=True)
     shipping_type = models.CharField(max_length=100, blank=True, null=True)
+    bestbuy_filled = models.BooleanField(default=False)
 
 
 class Report(models.Model):

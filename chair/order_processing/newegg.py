@@ -134,7 +134,7 @@ def parse_report(report_id):
             tracking_id = order['PackageInfoList'][0]['TrackingNumber']
             carrier = order['PackageInfoList'][0]['ShipCarrier']
             carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
-            ord.carrier = carrier
+            ord.carrier_code = carrier
             ord.tracking_id = tracking_id
             ord.save()
         except:
