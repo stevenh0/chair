@@ -2,178 +2,129 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}"> {% endblock %} {% block content %}
 
 <div class="landing-img noselect">
-    <div class="limiter ">
-        <table id="myTable" class="display">
-            <thead>
-                <tr class="pending">
-                    <th>Order No.</th>
-                    <th>Order Date</th>
-                    <th>SKU</th>
-                    <th>Customer Name</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Tracking</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in pending %}
-                <tr>
-                    <td>{{ order.order_id }}</td>
-                    <td>{{ order.received | date_formater }}</td>
-                    <td>{{ order.part_number }}</td>
-                    <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
-                    {% if order.customer_id.state == 'BC' %}
-                    <td style="color: #28a745">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                    {% else %}
-                    <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                    {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
-                    <td>Shipped</td>
-                    <td>{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
-                    <td>
-                        <button class="btn btn-details btn-tracking btn-primary">Get Tracking</button>
-                    </td>
-                    {% else %}
-                    <td>Debited</td>
-                    <td></td>
-                    <td>
-                        <button class="btn-send btn btn-primary" />Send
-                        <i class="fa fa-send fa-fw" aria-hidden="true" />
-                    </td>
-                    {% endif %} {% else %} {% if order.status == 'WAITING_ACCEPTANCE' %}
-                    <td>Awaiting Accept</td>
-                    <td>None </td>
-                    <td>
-                        <button class="btn-accept btn btn-success" />Accept
-                        <i class="fa fa-check fa-fw" aria-hidden="true" />
-                    </td>
-                    {% elif order.status == 'WAITING_DEBIT_PAYMENT' %}
-                    <t>Awaiting Debit</td>
-                        <td>None </td>
+    <div class="limiter">
+        <div class="table-wrapper">
+            <table id="pendingTable" class="display">
+                <thead>
+                    <tr class="pending">
+                        <th>Order No.</th>
+                        <th>Order Date</th>
+                        <th>SKU</th>
+                        <th>Customer Name</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Tracking No.</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in pending %}
+                    <tr>
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.received | date_formater }}</td>
+                        <td>{{ order.part_number }}</td>
+                        <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
+                        {% if order.customer_id.state == 'BC' %}
+                        <td style="color: #28a745">{{ order.customer_id.city }}
+                            <i class="fa fa-home fa-fw " aria-hidden="true " />
+                        </td>
+                        {% else %}
+                        <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                        {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
+                        <td>Shipped</td>
+                        <td>{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-details btn-tracking btn-primary">Get Tracking</button>
+                        </td>
+                        {% else %}
+                        <td>Debited</td>
                         <td></td>
-                        {% endif %} {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <table id="myTable2" class="display">
-            <thead>
-                <tr class="pending">
-                    <th style="text-align:center">Report ID</th>
-                    <th style="text-align:center">Process</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for report in reports %}
-                <tr>
-                    <td style="text-align:center" class="report_id">{{ report.request_id }}</td>
-                    <td style="text-align:center">
-                        <button class="btn btn-primary btn-parse-report">Process Report</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <table id="myTable3" class="display">
-            <thead>
-                <tr class="complete">
-                    <th>Order No.</th>
-                    <th>Order Date</th>
-                    <th>SKU</th>
-                    <th>Customer Name</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Total: {{ completed_len }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in completed %}
-                <tr class="row100 body">
-                    <td>{{ order.order_id }}</td>
-                    <td>{{ order.received | date_formater }}</td>
-                    <td>{{ order.part_number }}</td>
-                    <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
-                    {% if order.customer_id.state == 'BC' %}
-                    <td style="color: #28a745">{{ order.customer_id.city }}
-                        <i class="fa fa-home fa-fw " aria-hidden="true " />
-                    </td>
-                    {% else %}
-                    <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                    {% endif %} {% if order.status == 'RECEIVED' %}
-                    <td style="color: #28a745">Received</td>
-                    {% else %} {% if order.status == 'CANCELED' %}
-                    <td style="color: #dc3545">CANCELED</td>
-                    {% else %} {% if order.status == 'CLOSED' %}
-                    <td style="color: #dc3545">Closed</td>
-                    {% else %} {% if order.status == 'REFUSED' %}
-                    <td style="color: #dc3545">Refused</td>
-                    {% endif %} {% endif %} {% endif %} {% endif %}
+                        <td>
+                            <button class="btn-send btn-sm btn btn-primary" />Send
+                            <i class="fa fa-send fa-fw" aria-hidden="true" />
+                        </td>
+                        {% endif %} {% else %} {% if order.status == 'WAITING_ACCEPTANCE' %}
+                        <td>Awaiting Accept</td>
+                        <td>None </td>
+                        <td>
+                            <button class="btn-accept btn-sm btn btn-success" />Accept
+                            <i class="fa fa-check fa-fw" aria-hidden="true" />
+                        </td>
+                        {% elif order.status == 'WAITING_DEBIT_PAYMENT' %}
+                        <t>Awaiting Debit</td>
+                            <td>None </td>
+                            <td></td>
+                            {% endif %} {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="table-wrapper">
+            <table id="reportTable" class="display">
+                <thead>
+                    <tr class="report">
+                        <th style="text-align:center">Report ID</th>
+                        <th style="text-align:center">Process</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td style="text-align:center" class="report_id">{{ report.request_id }}</td>
+                        <td style="text-align:center">
+                            <button class="btn btn-primary btn-sm btn-parse-report">Process Report</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="table-wrapper">
+            <table id="completeTable" class="display">
+                <thead>
+                    <tr class="complete">
+                        <th>Order No.</th>
+                        <th>Order Date</th>
+                        <th>SKU</th>
+                        <th>Customer Name</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Total: {{ completed_len }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in completed %}
+                    <tr class="row100 body">
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.received | date_formater }}</td>
+                        <td>{{ order.part_number }}</td>
+                        <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
+                        {% if order.customer_id.state == 'BC' %}
+                        <td style="color: #28a745">{{ order.customer_id.city }}
+                            <i class="fa fa-home fa-fw " aria-hidden="true " />
+                        </td>
+                        {% else %}
+                        <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                        {% endif %} {% if order.status == 'RECEIVED' %}
+                        <td style="color: #28a745">Received</td>
+                        {% else %} {% if order.status == 'CANCELED' %}
+                        <td style="color: #dc3545">CANCELED</td>
+                        {% else %} {% if order.status == 'CLOSED' %}
+                        <td style="color: #dc3545">Closed</td>
+                        {% else %} {% if order.status == 'REFUSED' %}
+                        <td style="color: #dc3545">Refused</td>
+                        {% endif %} {% endif %} {% endif %} {% endif %}
 
-                    <td>
-                        <button class="btn-details btn btn-dark " />Details
-                        <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- <div class="container-table100">
-            <div class="wrap-table100">
-                <div class="table100 ver1 m-b-110">
-                    <div class="table100-head">
-                        <table>
-                            <thead>
-                                <tr class="row100 head complete">
-                                    <th class="cell100 column1">Order No.</th>
-                                    <th class="cell100 column2">Order Date</th>
-                                    <th class="cell100 column3">SKU</th>
-                                    <th class="cell100 column4">Customer Name</th>
-                                    <th class="cell100 column5">Location</th>
-                                    <th class="cell100 column6">Status</th>
-                                    <th class="cell100 column7">Total: {{ completed_len }}</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <div class="table100-body js-pscroll">
-                        <table>
-                            <tbody>
-                                {% for order in completed %}
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">{{ order.order_id }}</td>
-                                    <td class="cell100 column2">{{ order.received | date_formater }}</td>
-                                    <td class="cell100 column3">{{ order.part_number }}</td>
-                                    <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
-                                    {% if order.customer_id.state == 'BC' %}
-                                    <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}
-                                        <i class="fa fa-home fa-fw " aria-hidden="true " />
-                                    </td>
-                                    {% else %}
-                                    <td class="cell100 column5 ">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                                    {% endif %} {% if order.status == 'RECEIVED' %}
-                                    <td class="cell100 column6 " style="color: #28a745">Received</td>
-                                    {% else %} {% if order.status == 'CANCELED' %}
-                                    <td class="cell100 column6 " style="color: #dc3545">CANCELED</td>
-                                    {% else %} {% if order.status == 'CLOSED' %}
-                                    <td class="cell100 column6 " style="color: #dc3545">Closed</td>
-                                    {% else %} {% if order.status == 'REFUSED' %}
-                                    <td class="cell100 column6 " style="color: #dc3545">Refused</td>
-                                    {% endif %} {% endif %} {% endif %} {% endif %}
-
-                                    <td class="cell100 column7 ">
-                                        <button class="btn-details btn btn-dark " />Details
-                                        <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
+                        <td>
+                            <button class="btn-details btn-sm btn btn-dark " />Details
+                            <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock content %} {% block javascript %}
@@ -183,15 +134,15 @@
 <script>
 
     $(document).ready(function () {
-        $('#myTable').DataTable({ "order": [[0, "desc"]] });
+        $('#pendingTable').DataTable({ "order": [[0, "desc"]] });
     });
 
     $(document).ready(function () {
-        $('#myTable2').DataTable({ "order": [[0, "desc"]] });
+        $('#reportTable').DataTable({ "order": [[0, "desc"]] });
     });
 
     $(document).ready(function () {
-        $('#myTable3').DataTable({ "order": [[0, "desc"]] });
+        $('#completeTable').DataTable({ "order": [[0, "desc"]] });
     });
 
     // Accept Button
@@ -268,7 +219,6 @@
             console.log(msg);
         });
     });
-
 
     // Update tracking ID on bestbuy
     $(".btn-bestbuy-tracking ").click(function () {
