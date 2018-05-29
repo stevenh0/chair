@@ -164,12 +164,12 @@
           url: '../orders/accept/' + order_id + '/',
           success: function () {
             // On Success
-            location.reload();
           },
           error: function () {
             // cry for help
           }
         }).done(function (msg) {
+          location.reload();
           console.log(msg);
         });
       });
@@ -190,21 +190,53 @@
         // });
       });
 
-      // Update Tracking Info Button
+      // Send order via newegg
       $(".btn-send ").click(function () {
         var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
-        console.log('send with... ' + order_id)
-        // $.ajax({
-        //   type: 'GET',
-        //   url: '../orders/accept/' + order_id + '/',
-        //   success: function () {
-        //     console.log('success')
-        //   },
-        //   error: function () {
-        //     console.log('error')
-        //   }
-        // });
+        $.ajax({
+          type: 'GET',
+          url: '../orders/newegg_fulfill/' + order_id + '/'
+        }).done(function (msg) {
+          location.reload();
+          console.log(msg);
+        });
       });
 
+      // Request new tracking report to grab tracking ids
+      $(".btn-report ").click(function () {
+        $.ajax({
+          type: 'GET',
+          url: '../orders/get_report/'
+        }).done(function (msg) {
+          location.reload();
+          console.log(msg);
+        });
+      });
+
+      // Parse tracking report to get tracking IDs
+      $(".btn-parse-report ").click(function () {
+        //TODO: have to grab report id from table
+        var report_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        $.ajax({
+          type: 'GET',
+          url: '../orders/parse_report/' + report_id + '/'
+        }).done(function (msg) {
+          location.reload();
+          console.log(msg);
+        });
+      });
+
+
+      // Update tracking ID on bestbuy
+      $(".btn-bestbuy-tracking ").click(function () {
+        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        $.ajax({
+          type: 'GET',
+          url: '../orders/update_tracking/' + order_id + '/'
+        }).done(function (msg) {
+          location.reload();
+          console.log(msg);
+        });
+      });
     </script>
 {% endblock %}
