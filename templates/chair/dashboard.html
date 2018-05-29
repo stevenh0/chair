@@ -29,8 +29,8 @@
                     <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
                     {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
                     <td>Shipped</td>
-                    <td>{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
-                    <td>{% if not order.tracking %}
+                    <td>{% if not order.tracking_id %} None {% endif %}{{ order.tracking_id }}</td>
+                    <td>{% if not order.tracking_id %}
                         <button class="btn btn-details btn-tracking btn-primary">Req Report</button>
                         {% elif not order.bestbuy_filled %}
                         <button class="btn btn-details btn-bestbuy-tracking btn-primary">Update Tracking</button>
