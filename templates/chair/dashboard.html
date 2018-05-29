@@ -1,199 +1,210 @@
-{% extends 'base.html' %} {% load static %} {% load filters %} {% block stylesheet %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'utils/perfect-scrollbar.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'utils/select2.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'utils/animate.css' %}"> {% endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% load filters %}
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'utils/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'utils/select2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'utils/animate.css' %}"> {% endblock %} {% block content %}
 
-<div class="landing-img noselect">
+    <div class="landing-img noselect">
+        <div class="limiter ">
+            <div class="container-table100">
+                <div class="wrap-table100">
+                    <div class="table100 ver1 m-b-110">
+                        <div class="table100-head">
+                            <table>
+                                <thead>
+                                <tr class="row100 head pending">
+                                    <th class="cell100 column1">Order No.</th>
+                                    <th class="cell100 column2">Order Date</th>
+                                    <th class="cell100 column3">SKU</th>
+                                    <th class="cell100 column4">Customer Name</th>
+                                    <th class="cell100 column5">Location</th>
+                                    <th class="cell100 column6">Status</th>
+                                    <th class="cell100 column7">Tracking</th>
+                                    <th class="cell100 column8">Total: {{ pending_len }}</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="table100-body js-pscroll">
+                            <table>
+                                <tbody>
+                                {% for order in pending %}
+                                    <tr class="row100 body">
+                                        <td class="cell100 column1">{{ order.order_id }}</td>
+                                        <td class="cell100 column2">{{ order.received | date_formater }}</td>
+                                        <td class="cell100 column3">{{ order.part_number }}</td>
+                                        <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
+                                        {% if order.customer_id.state == 'BC' %}
+                                            <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                                        {% else %}
+                                            <td class="cell100 column5">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                                        {% endif %}
+                                        {% if order.status == 'SHIPPING' %}
+                                            {% if order.newegg_shipped %}
+                                                <td class="cell100 column6">Shipped</td>
+                                                <td class="cell100 column7">{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
+                                                <td class="cell100 column8">
+                                                    <button class="btn btn-details btn-tracking btn-primary">Get Tracking</button>
+                                                </td>
+                                            {% else %}
+                                                <td class="cell100 column6">Debited</td>
+                                                <td class="cell100 column7"></td>
+                                                <td class="cell100 column8">
+                                                    <button class="btn-send btn btn-primary" />Send
+                                                    <i class="fa fa-send fa-fw" aria-hidden="true" />
+                                                </td>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if order.status == 'WAITING_ACCEPTANCE' %}
+                                                <td class="cell100 column6">Awaiting Accept</td>
+                                                <td class="cell100 column7">None </td>
+                                                <td class="cell100 column8">
+                                                    <button class="btn-accept btn btn-success" />Accept
+                                                    <i class="fa fa-check fa-fw" aria-hidden="true" />
+                                                </td>
+                                            {% elif order.status == 'WAITING_DEBIT_PAYMENT' %}
+                                                <td class="cell100 column6">Awaiting Debit</td>
+                                                <td class="cell100 column7">None </td>
+                                                <td class="cell100 column8"></td>
+                                            {% endif %}
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  <div class="limiter ">
+            <div class="container-table100">
+                <div class="wrap-table100">
+                    <div class="table100 ver1 m-b-110">
+                        <div class="table100-head">
+                            <table>
+                                <thead>
+                                <tr class="row100 head complete">
+                                    <th class="cell100 column1">Order No.</th>
+                                    <th class="cell100 column2">Order Date</th>
+                                    <th class="cell100 column3">SKU</th>
+                                    <th class="cell100 column4">Customer Name</th>
+                                    <th class="cell100 column5">Location</th>
+                                    <th class="cell100 column6">Status</th>
+                                    <th class="cell100 column7">Total: {{ completed_len }}</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="table100-body js-pscroll">
+                            <table>
+                                <tbody>
+                                {% for order in completed %}
+                                    <tr class="row100 body">
+                                        <td class="cell100 column1">{{ order.order_id }}</td>
+                                        <td class="cell100 column2">{{ order.received | date_formater }}</td>
+                                        <td class="cell100 column3">{{ order.part_number }}</td>
+                                        <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
+                                        {% if order.customer_id.state == 'BC' %}
+                                            <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}
+                                                <i class="fa fa-home fa-fw " aria-hidden="true " />
+                                            </td>
+                                        {% else %}
+                                            <td class="cell100 column5 ">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                                        {% endif %} {% if order.status == 'RECEIVED' %}
+                                        <td class="cell100 column6 " style="color: #28a745">Received</td>
+                                    {% else %} {% if order.status == 'CANCELED' %}
+                                            <td class="cell100 column6 " style="color: #dc3545">CANCELED</td>
+                                        {% else %} {% if order.status == 'CLOSED' %}
+                                                <td class="cell100 column6 " style="color: #dc3545">Closed</td>
+                                            {% else %} {% if order.status == 'REFUSED' %}
+                                                    <td class="cell100 column6 " style="color: #dc3545">Refused</td>
+                                                {% endif %} {% endif %} {% endif %} {% endif %}
 
-    <div class="container-table100">
-      <div class="wrap-table100">
-        <div class="table100 ver1 m-b-110">
-          <div class="table100-head">
-            <table>
-              <thead>
-                <tr class="row100 head pending">
-                  <th class="cell100 column1">Order No.</th>
-                  <th class="cell100 column2">Order Date</th>
-                  <th class="cell100 column3">SKU</th>
-                  <th class="cell100 column4">Customer Name</th>
-                  <th class="cell100 column5">Location</th>
-                  <th class="cell100 column6">Status</th>
-                  <th class="cell100 column7">Total: {{ pending_len }}</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div class="table100-body js-pscroll">
-            <table>
-              <tbody>
-                {% for order in pending %}
-                <tr class="row100 body">
-                  <td class="cell100 column1">{{ order.order_id }}</td>
-                  <td class="cell100 column2">{{ order.received | date_formater }}</td>
-                  <td class="cell100 column3">{{ order.part_number }}</td>
-                  <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
-                  {% if order.customer_id.state == 'BC' %}
-                  <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                  {% else %}
-                  <td class="cell100 column5">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                  {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
-                  <td class="cell100 column6">Shipped</td>
-                  <td class="cell100 column7">
-                    <button class="btn btn-details btn-primary" />Details
-                    <i class="fa fa-caret-down fa-fw" aria-hidden="true" />
-                  </td>
-                  {% else %}
-                  <td class="cell100 column6">Debited</td>
-                  <td class="cell100 column7">
-                    <button class="btn-send btn btn-primary" />Send
-                    <i class="fa fa-send fa-fw" aria-hidden="true" />
-                  </td>
-                  {% endif %} {% else %} {% if order.status == 'WAITING_ACCEPTANCE' %}
-                  <td class="cell100 column6">Awaiting Accept</td>
-                  <td class="cell100 column7">
-                    <button class="btn-accept btn btn-success" />Accept
-                    <i class="fa fa-check fa-fw" aria-hidden="true" />
-                  </td>
-                  {% else %} {% if order.status == 'WAITING_DEBIT_PAYMENT' %}
-                  <td class="cell100 column6">Awaiting Debit</td>
-                  <td class="cell100 column7">
-                  </td> {% endif %} {% endif %} {% endif %}
+                                        <td class="cell100 column7 ">
+                                            <button class="btn-details btn btn-dark " />Details
+                                            <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
     </div>
+{% endblock content %}
 
-    <div class="container-table100">
-      <div class="wrap-table100">
-        <div class="table100 ver1 m-b-110">
-          <div class="table100-head">
-            <table>
-              <thead>
-                <tr class="row100 head complete">
-                  <th class="cell100 column1">Order No.</th>
-                  <th class="cell100 column2">Order Date</th>
-                  <th class="cell100 column3">SKU</th>
-                  <th class="cell100 column4">Customer Name</th>
-                  <th class="cell100 column5">Location</th>
-                  <th class="cell100 column6">Status</th>
-                  <th class="cell100 column7">Total: {{ completed_len }}</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div class="table100-body js-pscroll">
-            <table>
-              <tbody>
-                {% for order in completed %}
-                <tr class="row100 body">
-                  <td class="cell100 column1">{{ order.order_id }}</td>
-                  <td class="cell100 column2">{{ order.received | date_formater }}</td>
-                  <td class="cell100 column3">{{ order.part_number }}</td>
-                  <td class="cell100 column4">{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
-                  {% if order.customer_id.state == 'BC' %}
-                  <td class="cell100 column5" style="color: #28a745">{{ order.customer_id.city }}
-                    <i class="fa fa-home fa-fw " aria-hidden="true " />
-                  </td>
-                  {% else %}
-                  <td class="cell100 column5 ">{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
-                  {% endif %} {% if order.status == 'RECEIVED' %}
-                  <td class="cell100 column6 " style="color: #28a745">Received</td>
-                  {% else %} {% if order.status == 'CANCELED' %}
-                  <td class="cell100 column6 " style="color: #dc3545">CANCELED</td>
-                  {% else %} {% if order.status == 'CLOSED' %}
-                  <td class="cell100 column6 " style="color: #dc3545">Closed</td>
-                  {% else %} {% if order.status == 'REFUSED' %}
-                  <td class="cell100 column6 " style="color: #dc3545">Refused</td>
-                  {% endif %} {% endif %} {% endif %} {% endif %}
+{% block javascript %}
+    <script src="{% static 'js/select2.js' %} "></script>
+    <script src="{% static 'js/perfect-scrollbar.js' %} "></script>
+    <script>
 
-                  <td class="cell100 column7 ">
-                    <button class="btn-details btn btn-dark " />Details
-                    <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+      // Custom Scrollbar - NECESSARY
+      $('.js-pscroll').each(function () {
+        var ps = new PerfectScrollbar(this);
 
-  </div>
-</div>
+        $(window).on('resize', function () {
+          ps.update();
+        })
+      });
 
-{% endblock content %} {% block javascript %}
+      // Accept Button
+      $(".btn-accept ").click(function (e) {
+        e.preventDefault();
+        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
 
-<script src="{% static 'js/select2.js' %} "></script>
-<script src="{% static 'js/perfect-scrollbar.js' %} "></script>
-<script>
+        $.ajax({
+          type: 'GET',
+          url: '../orders/accept/' + order_id + '/',
+          success: function () {
+            // On Success
+            location.reload();
+          },
+          error: function () {
+            // cry for help
+          }
+        }).done(function (msg) {
+          console.log(msg);
+        });
+      });
 
-  // Custom Scrollbar - NECESSARY
-  $('.js-pscroll').each(function () {
-    var ps = new PerfectScrollbar(this);
+      // Details Button
+      $(".btn-details ").click(function () {
+        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        console.log('details with... ' + order_id)
+        // $.ajax({
+        //   type: 'GET',
+        //   url: '../orders/accept/' + order_id + '/',
+        //   success: function () {
+        //     console.log('success')
+        //   },
+        //   error: function () {
+        //     console.log('error')
+        //   }
+        // });
+      });
 
-    $(window).on('resize', function () {
-      ps.update();
-    })
-  });
+      // Update Tracking Info Button
+      $(".btn-send ").click(function () {
+        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        console.log('send with... ' + order_id)
+        // $.ajax({
+        //   type: 'GET',
+        //   url: '../orders/accept/' + order_id + '/',
+        //   success: function () {
+        //     console.log('success')
+        //   },
+        //   error: function () {
+        //     console.log('error')
+        //   }
+        // });
+      });
 
-  // Accept Button
-  $(".btn-accept ").click(function (e) {
-    e.preventDefault();
-    var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
-
-    $.ajax({
-      type: 'GET',
-      url: '../orders/accept/' + order_id + '/',
-      success: function () {
-        // On Success
-      },
-      error: function () {
-        // cry for help
-      }
-    }).done(function (msg) {
-      console.log(msg);
-    });
-  });
-
-  // Details Button
-  $(".btn-details ").click(function () {
-    var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
-    console.log('details with... ' + order_id)
-    // $.ajax({
-    //   type: 'GET',
-    //   url: '../orders/accept/' + order_id + '/',
-    //   success: function () {
-    //     console.log('success')
-    //   },
-    //   error: function () {
-    //     console.log('error')
-    //   }
-    // });
-  });
-
-  // Update Tracking Info Button
-  $(".btn-send ").click(function () {
-    var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
-    console.log('send with... ' + order_id)
-    // $.ajax({
-    //   type: 'GET',
-    //   url: '../orders/accept/' + order_id + '/',
-    //   success: function () {
-    //     console.log('success')
-    //   },
-    //   error: function () {
-    //     console.log('error')
-    //   }
-    // });
-  });
-
-</script> {% endblock %}
+    </script>
+{% endblock %}
