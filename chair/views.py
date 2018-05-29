@@ -102,15 +102,6 @@ def get_newegg_report(request):
 
 
 @login_required()
-<<<<<<< HEAD
-def parse_report(request, report_id):
-    parse_report(report_id)
-    return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
-
-
-@login_required()
-=======
->>>>>>> 8eced3801dc658820684b5c40b875d66ecae2d2d
 def process_report(request, report_id):
     parsed = parse_report(report_id)
     if parsed:
@@ -120,7 +111,4 @@ def process_report(request, report_id):
         return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
     else:
         return JsonResponse({'status': 'error', 'message': 'Report {} unsuccessfully parsed'.format(report_id)})
-<<<<<<< HEAD
-=======
 
->>>>>>> 8eced3801dc658820684b5c40b875d66ecae2d2d
