@@ -25,7 +25,7 @@ def dashboard(request):
         Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
     pending = Order.objects.filter(
         Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING'))
-    return render(request, "chair/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending), 'completed_len': len(completed), 'pending_len': len(pending)})
+    return render(request, "chair/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending), 'completed_len': len(completed)})
 
 
 @login_required()
