@@ -56,8 +56,25 @@
                 {% endfor %}
             </tbody>
         </table>
-
         <table id="myTable2" class="display">
+            <thead>
+                <tr class="pending">
+                    <th style="text-align:center">Report ID</th>
+                    <th style="text-align:center">Process</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td style="text-align:center" class="report_id">{{ report.request_id }}</td>
+                    <td style="text-align:center">
+                        <button class="btn btn-primary btn-parse-report">Process Report</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table id="myTable3" class="display">
             <thead>
                 <tr class="complete">
                     <th>Order No.</th>
@@ -173,6 +190,10 @@
         $('#myTable2').DataTable({ "order": [[0, "desc"]] });
     });
 
+    $(document).ready(function () {
+        $('#myTable3').DataTable({ "order": [[0, "desc"]] });
+    });
+
     // Accept Button
     $(".btn-accept ").click(function (e) {
         e.preventDefault();
@@ -234,11 +255,14 @@
 
     // Parse tracking report to get tracking IDs
     $(".btn-parse-report ").click(function () {
-        //TODO: have to grab report id from table
-        var report_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var report_id = $(this).parent().siblings(".report_id").html();
+        console.log(report_id);
         $.ajax({
             type: 'GET',
-            url: '../orders/parse_report/' + report_id + '/'
+            url: '../orders/parse_report/' + report_id + '/',
+            error: function () {
+                console.log("I broke");
+            }
         }).done(function (msg) {
             location.reload();
             console.log(msg);
