@@ -130,7 +130,7 @@ def parse_report(report_id):
     orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
     for order in orders:
         try:
-            ord = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
+            ord, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
             tracking_id = order['PackageInfoList'][0]['TrackingNumber']
             carrier = order['PackageInfoList'][0]['ShipCarrier']
             carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
@@ -138,4 +138,5 @@ def parse_report(report_id):
             ord.tracking_id = tracking_id
             ord.save()
         except:
-            print('tracking id not yet ready for order {}').format(order['SellerOrderNumber'])
+            return 0
+    return 1

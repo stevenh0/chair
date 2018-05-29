@@ -25,7 +25,9 @@ def dashboard(request):
         Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
     pending = Order.objects.filter(
         Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING'))
-    return render(request, "chair/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending), 'completed_len': len(completed)})
+    reports = Report.objects.filter(processed=False)
+    return render(request, "chair/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending),
+                                                            'reports': reversed(reports), 'completed_len': len(completed)})
 
 
 @login_required()
@@ -103,6 +105,26 @@ def get_newegg_report(request):
 
 
 @login_required()
+<< << << < HEAD
+
+
 def parse_report(request, report_id):
     parse_report(report_id)
     return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
+
+
+== == == =
+
+
+def process_report(request, report_id):
+    parsed = parse_report(report_id)
+    if parsed:
+        report = Report.objects.get(report_id=report_id)
+        report.processed = True
+        report.save()
+        return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Report {} unsuccessfully parsed'.format(report_id)})
+
+
+>>>>>> > bdfdec60af7d059f6132bd4126b0d8cc4d92e378
