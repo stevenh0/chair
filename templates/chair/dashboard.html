@@ -148,7 +148,7 @@
     // Accept Button
     $(".btn-accept ").click(function (e) {
         e.preventDefault();
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
 
         $.ajax({
             type: 'GET',
@@ -167,7 +167,7 @@
 
     // Details Button
     $(".btn-details ").click(function () {
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
         console.log('details with... ' + order_id)
         // $.ajax({
         //   type: 'GET',
@@ -183,7 +183,7 @@
 
     // Send order via newegg
     $(".btn-send ").click(function () {
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
         $.ajax({
             type: 'GET',
             url: '../orders/newegg_fulfill/' + order_id + '/'
@@ -212,7 +212,7 @@
             type: 'GET',
             url: '../orders/parse_report/' + report_id + '/',
             error: function () {
-                console.log("I broke");
+                alert("Report not ready for processing");
             }
         }).done(function (msg) {
             location.reload();

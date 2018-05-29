@@ -84,15 +84,12 @@ def reject_order(request, order_id):
 @login_required()
 def update_tracking(request, order_id):
     order = Order.objects.get(order_id=order_id)
-    tracking_id = get_newegg_tracking_id(order.newegg_feed)
-    if not 'error' in tracking_id:
-        return JsonResponse({'status': 'error', 'message': 'tracking number has not been updated yet for this order'})
     headers = {'Authorization': BESTBUY_KEY}
     tracking_data = {'carrier_code': order.carrier_code,
-                     'tracking_number': tracking_id}
+                     'tracking_number': order.tracking_id}
     requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order_id),
                  data=json.dumps(tracking_data), headers=headers)
-    order.tracking_id = tracking_id
+    order.bestbuy_filled = True
     order.save()
     return JsonResponse({'status': 'success', 'message': 'tracking number for order {} has been updated'.format(order_id)})
 
@@ -105,12 +102,15 @@ def get_newegg_report(request):
 
 
 @login_required()
+<<<<<<< HEAD
 def parse_report(request, report_id):
     parse_report(report_id)
     return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
 
 
 @login_required()
+=======
+>>>>>>> 8eced3801dc658820684b5c40b875d66ecae2d2d
 def process_report(request, report_id):
     parsed = parse_report(report_id)
     if parsed:
@@ -120,3 +120,7 @@ def process_report(request, report_id):
         return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
     else:
         return JsonResponse({'status': 'error', 'message': 'Report {} unsuccessfully parsed'.format(report_id)})
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8eced3801dc658820684b5c40b875d66ecae2d2d
