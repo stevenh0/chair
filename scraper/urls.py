@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^orders/reject/(?P<order_id>[-_a-zA-Z0-9]+)/$', reject_order, name='reject_order'),
     url(r'^orders/newegg_fulfill/(?P<order_id>[-_a-zA-Z0-9]+)/$',
         newegg_fulfill, name='newegg_fulfill'),
+    url(r'^orders/get_report/$', get_newegg_report, name='get_newegg_report'),
+    url(r'^orders/parse_report/(?P<report_id>[-_a-zA-Z0-9]+)/$', parse_report, name='parse_report'),
     url(r'^orders/update_tracking/(?P<order_id>[-_a-zA-Z0-9]+)/$',
         update_tracking, name='update_tracking'),
     path('admin/', admin.site.urls),

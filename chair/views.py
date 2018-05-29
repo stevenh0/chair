@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.db.models import Q
 
 from scraper.settings import BESTBUY_KEY, CARRIER_CODE
-from chair.models import Order, OrderStatus
+from chair.models import Order, OrderStatus, Report
 from chair.order_processing.bestbuy import grab_orders, process_order
-from chair.order_processing.newegg import get_newegg_tracking_id, newegg_ship
+from chair.order_processing.newegg import get_newegg_tracking_id, newegg_ship, get_report, parse_report
 
 import requests
 import json
@@ -93,3 +93,16 @@ def update_tracking(request, order_id):
     order.tracking_id = tracking_id
     order.save()
     return JsonResponse({'status': 'success', 'message': 'tracking number for order {} has been updated'.format(order_id)})
+
+
+@login_required()
+def get_newegg_report(request):
+    report_id = get_report()
+    report, _ = Report.objects.get_or_create(request_id=report_id)
+    return JsonResponse({'status': 'success', 'message': 'Report successfully requested'})
+
+
+@login_required()
+def parse_report(request, report_id):
+    parse_report(report_id)
+    return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
