@@ -36,8 +36,10 @@
                         <td>
                             {% if not order.tracking_id %}
                                 <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
-                                {% else %}
+                                {% elif not order.bestbuy_filled %}
                                 <button class="btn btn-sm btn-details btn-bestbuy-tracking btn-primary">Update Bestbuy</button>
+                                {% else %}
+                                Order Processed
                                 {% endif %}
                         </td>
                         {% else %}
