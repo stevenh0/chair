@@ -130,13 +130,13 @@ def parse_report(report_id):
     try:
         orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
         for order in orders:
-                ord, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
-                tracking_id = order['PackageInfoList'][0]['TrackingNumber']
-                carrier = order['PackageInfoList'][0]['ShipCarrier']
-                carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
-                ord.carrier_code = carrier
-                ord.tracking_id = tracking_id
-                ord.save()
+            cur_order, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
+            tracking_id = order['PackageInfoList'][0]['TrackingNumber']
+            carrier = order['PackageInfoList'][0]['ShipCarrier']
+            carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
+            cur_order.carrier_code = carrier
+            cur_order.tracking_id = tracking_id
+            cur_order.save()
     except:
         if r.status_code == 200:
             return -1

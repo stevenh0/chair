@@ -30,7 +30,8 @@ def load_order(order_info):
         customer = update_customer_info(order_info.get('customer'))
         order.customer_id = customer
         order.status = order_info.get('order_state')
-        order.tracking_id = order_info.get('shipping_tracking')
+        if order_info.get('shipping_tracking'):
+            order.tracking_id = order_info.get('shipping_tracking')
         order.quantity = item.get('quantity')
         order.received = order_info.get('created_date')
         order.order_line_id = item.get('order_line_id')
@@ -72,3 +73,11 @@ def process_order(order, accept):
     r = requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order.order_id),
                      headers=headers, data=json.dumps(data))
     return r
+
+
+def send_tracking_bestbuy(order):
+    headers = {'Authorization': BESTBUY_KEY}
+    tracking_data = {'carrier_code': order.carrier_code,
+                     'tracking_number': order.tracking_id}
+    requests.put('https://marketplace.bestbuy.ca/api/orders/{}/tracking'.format(order.order_id),
+                 data=json.dumps(tracking_data), headers=headers)

@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from scraper.settings import BESTBUY_KEY, CARRIER_CODE
 from chair.models import Order, OrderStatus, Report
-from chair.order_processing.bestbuy import grab_orders, process_order
+from chair.order_processing.bestbuy import grab_orders, process_order, send_tracking_bestbuy
 from chair.order_processing.newegg import get_newegg_tracking_id, newegg_ship, get_report, parse_report
 
 import requests
@@ -86,11 +86,7 @@ def reject_order(request, order_id):
 @login_required()
 def update_tracking(request, order_id):
     order = Order.objects.get(order_id=order_id)
-    headers = {'Authorization': BESTBUY_KEY}
-    tracking_data = {'carrier_code': order.carrier_code,
-                     'tracking_number': order.tracking_id}
-    requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order_id),
-                 data=json.dumps(tracking_data), headers=headers)
+    send_tracking_bestbuy(order)
     order.bestbuy_filled = True
     order.save()
     return JsonResponse({'status': 'success', 'message': 'tracking number for order {} has been updated'.format(order_id)})

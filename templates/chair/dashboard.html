@@ -32,9 +32,13 @@
                         <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
                         {% endif %} {% if order.status == 'SHIPPING' %} {% if order.newegg_shipped %}
                         <td>Shipped</td>
-                        <td>{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
+                        <td>{% if not order.tracking_id %} None {% else %}{{ order.tracking_id }} {% endif %}</td>
                         <td>
-                            <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
+                            {% if not order.tracking_id %}
+                                <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
+                                {% else %}
+                                <button class="btn btn-sm btn-details btn-bestbuy-tracking btn-primary">Update Bestbuy</button>
+                                {% endif %}
                         </td>
                         {% else %}
                         <td>Debited</td>
@@ -214,14 +218,17 @@
                 alert("Report not ready, or did not contain necessary info");
             }
         }).done(function (msg) {
-            location.reload();
-            console.log(msg);
+            if (msg.status == 'error') {
+              alert("Report not ready, or did not contain necessary info");
+            } else {
+              location.reload();
+            }
         });
     });
 
     // Update tracking ID on bestbuy
     $(".btn-bestbuy-tracking ").click(function () {
-        var order_id = $(this).parent().siblings("td.cell100.column1 ").html();
+        var order_id = $(this).parent().siblings(".order_id").html();
         $.ajax({
             type: 'GET',
             url: '../orders/update_tracking/' + order_id + '/'
