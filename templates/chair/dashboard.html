@@ -20,7 +20,7 @@
                 <tbody>
                     {% for order in pending %}
                     <tr>
-                        <td>{{ order.order_id }}</td>
+                        <td class="order_id">{{ order.order_id }}</td>
                         <td>{{ order.received | date_formater }}</td>
                         <td>{{ order.part_number }}</td>
                         <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
@@ -51,7 +51,7 @@
                             <i class="fa fa-check fa-fw" aria-hidden="true" />
                         </td>
                         {% elif order.status == 'WAITING_DEBIT_PAYMENT' %}
-                        <t>Awaiting Debit</td>
+                        <td>Awaiting Debit</td>
                             <td>None </td>
                             <td></td>
                             {% endif %} {% endif %}
@@ -149,6 +149,7 @@
     $(".btn-accept ").click(function (e) {
         e.preventDefault();
         var order_id = $(this).parent().siblings(".order_id").html();
+        console.log(order_id);
 
         $.ajax({
             type: 'GET',
@@ -160,7 +161,6 @@
                 // cry for help
             }
         }).done(function (msg) {
-            location.reload();
             console.log(msg);
         });
     });

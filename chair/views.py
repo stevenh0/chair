@@ -55,7 +55,8 @@ def newegg_fulfill(request, order_id):
 
 @login_required()
 def accept_order(request, order_id):
-    r = process_order(order_id, True)
+    order = Order.objects.get(order_id=order_id)
+    r = process_order(order, True)
     if not r.status_code == 204:
         return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
     # sync db with orders
@@ -68,7 +69,8 @@ def accept_order(request, order_id):
 
 @login_required()
 def reject_order(request, order_id):
-    r = process_order(order_id, False)
+    order = Order.objects.get(order_id=order_id)
+    r = process_order(order, False)
     if not r.status_code == 204:
         return JsonResponse({'status': 'error', 'message': 'error in accepting order {}'.format(order_id)})
     # date = (datetime.date.today() - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')

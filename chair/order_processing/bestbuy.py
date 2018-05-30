@@ -61,14 +61,14 @@ def update_customer_info(customer_info):
     return customer
 
 
-def process_order(order_id, accept):
+def process_order(order, accept):
     headers = {'Authorization': BESTBUY_KEY, 'Content-Type': 'application/json'}
     data = {
         "order_lines": [{
             "accepted": accept,
-            "id": order_id,
+            "id": order.order_line_id,
         }]
     }
-    r = requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order_id),
+    r = requests.put('https://marketplace.bestbuy.ca/api/orders/{}/accept'.format(order.order_id),
                      headers=headers, data=json.dumps(data))
     return r
