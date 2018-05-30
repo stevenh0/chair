@@ -38,5 +38,4 @@ class Order(models.Model):
 
 class Report(models.Model):
     request_id = models.CharField(max_length=100, blank=True, null=True)
-    shipped_report_id = models.CharField(max_length=100, blank=True, null=True)
     processed = models.BooleanField(default=False)
