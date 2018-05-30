@@ -132,8 +132,8 @@ def parse_report(report_id):
         for order in orders:
             cur_order, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
             tracking_id = order['PackageInfoList'][0]['TrackingNumber']
-            carrier = order['PackageInfoList'][0]['ShipCarrier']
-            carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
+            # carrier = order['PackageInfoList'][0]['ShipCarrier']
+            carrier = 'PRLA' if 'BVF' in tracking_id else 'CPCL'
             cur_order.carrier_code = carrier
             cur_order.tracking_id = tracking_id
             cur_order.save()
