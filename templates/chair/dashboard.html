@@ -34,7 +34,7 @@
                         <td>Shipped</td>
                         <td>{% if not order.tracking %} None {% endif %}{{ order.tracking }}</td>
                         <td>
-                            <button class="btn btn-sm btn-details btn-tracking btn-primary">Get Tracking</button>
+                            <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
                         </td>
                         {% else %}
                         <td>Debited</td>
@@ -96,7 +96,7 @@
                 <tbody>
                     {% for order in completed %}
                     <tr class="row100 body">
-                        <td>{{ order.order_id }}</td>
+                        <td class="order_id">{{ order.order_id }}</td>
                         <td>{{ order.received | date_formater }}</td>
                         <td>{{ order.part_number }}</td>
                         <td>{{ order.customer_id.firstname }} {{order.customer_id.lastname }}</td>
@@ -211,7 +211,7 @@
             type: 'GET',
             url: '../orders/parse_report/' + report_id + '/',
             error: function () {
-                alert("Report not ready for processing");
+                alert("Report not ready, or did not contain necessary info");
             }
         }).done(function (msg) {
             location.reload();

@@ -98,7 +98,7 @@ def get_report():
             "OrderReportCriteria": {
                 "RequestType": "ORDER_LIST_REPORT",
                 "KeywordsType": "0",
-                "Status": "2",
+                "Status": "0",
                 "Type": "0",
             }
         }
@@ -127,16 +127,18 @@ def parse_report(report_id):
     }
     r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
                      headers=headers, data=json.dumps(data))
-    orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
-    for order in orders:
-        try:
-            ord, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
-            tracking_id = order['PackageInfoList'][0]['TrackingNumber']
-            carrier = order['PackageInfoList'][0]['ShipCarrier']
-            carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
-            ord.carrier_code = carrier
-            ord.tracking_id = tracking_id
-            ord.save()
-        except:
-            return 0
+    try:
+        orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
+        for order in orders:
+                ord, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
+                tracking_id = order['PackageInfoList'][0]['TrackingNumber']
+                carrier = order['PackageInfoList'][0]['ShipCarrier']
+                carrier = 'PRLA' if 'purolator' in carrier.lower() else 'CPCL'
+                ord.carrier_code = carrier
+                ord.tracking_id = tracking_id
+                ord.save()
+    except:
+        if r.status_code == 200:
+            return -1
+        return 0
     return 1
