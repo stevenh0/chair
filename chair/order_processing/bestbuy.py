@@ -79,5 +79,8 @@ def send_tracking_bestbuy(order):
     headers = {'Authorization': BESTBUY_KEY}
     tracking_data = {'carrier_code': order.carrier_code,
                      'tracking_number': order.tracking_id}
-    requests.put('https://marketplace.bestbuy.ca/api/orders/{}/tracking'.format(order.order_id),
-                 data=json.dumps(tracking_data), headers=headers)
+    r = requests.put('https://marketplace.bestbuy.ca/api/orders/{}/tracking'.format(order.order_id),
+                      data=json.dumps(tracking_data), headers=headers)
+    if r.status_code == 204:
+        r = requests.put('https://marketplace.bestbuy.ca/api/orders/{}/ship'.format(order.order_id), headers=headers)
+        return r.status_code
