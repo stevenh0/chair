@@ -149,8 +149,6 @@
     $(".btn-accept ").click(function (e) {
         e.preventDefault();
         var order_id = $(this).parent().siblings(".order_id").html();
-        console.log(order_id);
-
         $.ajax({
             type: 'GET',
             url: '../orders/accept/' + order_id + '/',
@@ -161,6 +159,7 @@
                 // cry for help
             }
         }).done(function (msg) {
+            location.reload();
             console.log(msg);
         });
     });
