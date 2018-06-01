@@ -101,15 +101,8 @@ def get_newegg_report(request):
 
 @login_required()
 def process_report(request, report_id):
-    report = Report.objects.get(request_id=report_id)
     parsed = parse_report(report_id)
-    if parsed == -1:
-        report.processed = True
-        report.save()
-        return JsonResponse({'status': 'error', 'message': 'Report {} did not contain the necessary info'.format(report_id)})
-    elif parsed > 0:
-        report.processed = True
-        report.save()
+    if parsed > 0:
         return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
     else:
         return JsonResponse({'status': 'error', 'message': 'Report {} did not contain the necessary info at this time, try again later'.format(report_id)})

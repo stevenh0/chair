@@ -2,7 +2,7 @@ from scraper.settings import NEWEGG_AUTH, NEWEGG_KEY
 import requests
 import json
 import datetime
-from chair.models import Order
+from chair.models import Order, Report
 
 SELLER_ID = 'AFG1'
 
@@ -127,9 +127,10 @@ def parse_report(report_id):
     }
     r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
                      headers=headers, data=json.dumps(data))
-    try:
-        orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
-        for order in orders:
+    any_left_unparsed = False
+    orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
+    for order in orders:
+        try:
             cur_order, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
             tracking_id = order['PackageInfoList'][0]['TrackingNumber']
             # carrier = order['PackageInfoList'][0]['ShipCarrier']
@@ -137,6 +138,11 @@ def parse_report(report_id):
             cur_order.carrier_code = carrier
             cur_order.tracking_id = tracking_id
             cur_order.save()
-    except:
-        return 0
-    return 1
+        except:
+            any_left_unparsed = True
+    if not any_left_unparsed:
+        report = Report.objects.get(report_id=report_id)
+        report.processed = True
+        report.save()
+        return 1
+    return 0
