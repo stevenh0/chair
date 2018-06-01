@@ -112,4 +112,4 @@ def process_report(request, report_id):
         report.save()
         return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
     else:
-        return JsonResponse({'status': 'error', 'message': 'Report {} unsuccessfully parsed'.format(report_id)})
+        return JsonResponse({'status': 'error', 'message': 'Report {} did not contain the necessary info at this time, try again later'.format(report_id)})

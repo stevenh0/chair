@@ -138,7 +138,5 @@ def parse_report(report_id):
             cur_order.tracking_id = tracking_id
             cur_order.save()
     except:
-        if r.status_code == 200:
-            return -1
         return 0
     return 1
