@@ -49,6 +49,7 @@ def newegg_fulfill(request, order_id):
     for o in order:
         newegg_ship(o)
     order.update(newegg_shipped=True)
+    get_report()
     return JsonResponse(
         {'status': 'success', 'message': 'shipment for order {} has been created'.format(order_id)})
 
