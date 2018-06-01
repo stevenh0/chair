@@ -3,6 +3,7 @@ import requests
 import json
 import datetime
 from chair.models import Order, Report
+from chair.order_processing.bestbuy import send_tracking_bestbuy
 
 SELLER_ID = 'AFG1'
 
@@ -132,15 +133,21 @@ def parse_report(report_id):
     for order in orders:
         try:
             cur_order, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
+            cur_order.has_report = True
+            cur_order.save()
             tracking_id = order['PackageInfoList'][0]['TrackingNumber']
             # carrier = order['PackageInfoList'][0]['ShipCarrier']
             carrier = 'PRLA' if 'BVF' in tracking_id else 'CPCL'
             cur_order.carrier_code = carrier
             cur_order.tracking_id = tracking_id
             cur_order.save()
+            processed = send_tracking_bestbuy(cur_order)
+            if processed > 0:
+                cur_order.bestbuy_filled = True
+                cur_order.save()
         except:
             any_left_unparsed = True
-    if not any_left_unparsed:
+    if not any_left_unparsed or json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount'] == 0:
         report = Report.objects.get(request_id=report_id)
         report.processed = True
         report.save()
