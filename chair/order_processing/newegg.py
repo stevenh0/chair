@@ -141,7 +141,7 @@ def parse_report(report_id):
         except:
             any_left_unparsed = True
     if not any_left_unparsed:
-        report = Report.objects.get(report_id=report_id)
+        report = Report.objects.get(request_id=report_id)
         report.processed = True
         report.save()
         return 1
