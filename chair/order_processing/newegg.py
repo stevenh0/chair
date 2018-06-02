@@ -2,7 +2,8 @@ from scraper.settings import NEWEGG_AUTH, NEWEGG_KEY
 import requests
 import json
 import datetime
-from chair.models import Order
+from chair.models import Order, Report
+from chair.order_processing.bestbuy import send_tracking_bestbuy
 
 SELLER_ID = 'AFG1'
 
@@ -127,18 +128,28 @@ def parse_report(report_id):
     }
     r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
                      headers=headers, data=json.dumps(data))
-    try:
-        orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
-        for order in orders:
+    any_left_unparsed = False
+    orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
+    for order in orders:
+        try:
             cur_order, _ = Order.objects.get_or_create(order_id=order['SellerOrderNumber'])
+            cur_order.has_report = True
+            cur_order.save()
             tracking_id = order['PackageInfoList'][0]['TrackingNumber']
             # carrier = order['PackageInfoList'][0]['ShipCarrier']
             carrier = 'PRLA' if 'BVF' in tracking_id else 'CPCL'
             cur_order.carrier_code = carrier
             cur_order.tracking_id = tracking_id
             cur_order.save()
-    except:
-        if r.status_code == 200:
-            return -1
-        return 0
-    return 1
+            processed = send_tracking_bestbuy(cur_order)
+            if processed > 0:
+                cur_order.bestbuy_filled = True
+                cur_order.save()
+        except:
+            any_left_unparsed = True
+    if not any_left_unparsed or json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount'] == 0:
+        report = Report.objects.get(request_id=report_id)
+        report.processed = True
+        report.save()
+        return 1
+    return 0

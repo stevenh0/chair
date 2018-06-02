@@ -34,6 +34,7 @@ class Order(models.Model):
     order_line_id = models.CharField(max_length=100, blank=True, null=True)
     shipping_type = models.CharField(max_length=100, blank=True, null=True)
     bestbuy_filled = models.BooleanField(default=False)
+    has_report = models.BooleanField(default=False)
 
 
 class Report(models.Model):
