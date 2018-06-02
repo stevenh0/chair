@@ -3,6 +3,33 @@
 
 <div class="landing-img noselect">
     <div class="limiter">
+
+        <div class="table-wrapper">
+            <table id="stockTable" class="display">
+                <thead>
+                    <tr class="stock">
+                        <th>SKU/ITEM_NAME</th>
+                        <th>AUTO ACCEPT?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in list_of_products %}
+                    <tr>
+                        <td class="sku_id">{{ 'item.SKU' }}</td>
+                        <!-- Toggle -->
+                        <td>
+                            <!-- Switch has access to SKU number on toggle -->
+                            <label class="switch">
+                                <input class="on" type="checkbox">
+                                <div class="slider round"></div>
+                            </label>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         <div class="table-wrapper">
             <table id="pendingTable" class="display">
                 <thead>
@@ -35,12 +62,10 @@
                         <td>{% if not order.tracking_id %} None {% else %}{{ order.tracking_id }} {% endif %}</td>
                         <td>
                             {% if not order.tracking_id %}
-                                <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
-                                {% elif not order.bestbuy_filled %}
-                                <button class="btn btn-sm btn-details btn-bestbuy-tracking btn-primary">Update Bestbuy</button>
-                                {% else %}
-                                Order Processed
-                                {% endif %}
+                            <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
+                            {% elif not order.bestbuy_filled %}
+                            <button class="btn btn-sm btn-details btn-bestbuy-tracking btn-primary">Update Bestbuy</button>
+                            {% else %} Order Processed {% endif %}
                         </td>
                         {% else %}
                         <td>Debited</td>
@@ -58,9 +83,9 @@
                         </td>
                         {% elif order.status == 'WAITING_DEBIT_PAYMENT' %}
                         <td>Awaiting Debit</td>
-                            <td>None </td>
-                            <td></td>
-                            {% endif %} {% endif %}
+                        <td>None </td>
+                        <td></td>
+                        {% endif %} {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -137,106 +162,7 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="{% static 'js/dashboard.js' %}"></script>
 <script>
-
-    $(document).ready(function () {
-        $('#pendingTable').DataTable({ "order": [[0, "desc"]] });
-    });
-
-    $(document).ready(function () {
-        $('#reportTable').DataTable({ "order": [[0, "desc"]] });
-    });
-
-    $(document).ready(function () {
-        $('#completeTable').DataTable({ "order": [[0, "desc"]] });
-    });
-
-    // Accept Button
-    $(".btn-accept ").click(function (e) {
-        e.preventDefault();
-        var order_id = $(this).parent().siblings(".order_id").html();
-        $.ajax({
-            type: 'GET',
-            url: '../orders/accept/' + order_id + '/',
-            success: function () {
-                // On Success
-            },
-            error: function () {
-                // cry for help
-            }
-        }).done(function (msg) {
-            location.reload();
-            console.log(msg);
-        });
-    });
-
-    // Details Button
-    $(".btn-details ").click(function () {
-        var order_id = $(this).parent().siblings(".order_id").html();
-        console.log('details with... ' + order_id)
-        // $.ajax({
-        //   type: 'GET',
-        //   url: '../orders/accept/' + order_id + '/',
-        //   success: function () {
-        //     console.log('success')
-        //   },
-        //   error: function () {
-        //     console.log('error')
-        //   }
-        // });
-    });
-
-    // Send order via newegg
-    $(".btn-send ").click(function () {
-        var order_id = $(this).parent().siblings(".order_id").html();
-        $.ajax({
-            type: 'GET',
-            url: '../orders/newegg_fulfill/' + order_id + '/'
-        }).done(function (msg) {
-            location.reload();
-            console.log(msg);
-        });
-    });
-
-    // Request new tracking report to grab tracking ids
-    $(".btn-report ").click(function () {
-        $.ajax({
-            type: 'GET',
-            url: '../orders/get_report/'
-        }).done(function (msg) {
-            location.reload();
-            console.log(msg);
-        });
-    });
-
-    // Parse tracking report to get tracking IDs
-    $(".btn-parse-report ").click(function () {
-        var report_id = $(this).parent().siblings(".report_id").html();
-        console.log(report_id);
-        $.ajax({
-            type: 'GET',
-            url: '../orders/parse_report/' + report_id + '/',
-            error: function () {
-                alert("Report not ready, or did not contain necessary info");
-            }
-        }).done(function (msg) {
-            if (msg.status == 'error') {
-              alert("Report not ready, or did not contain necessary info");
-            } else {
-              location.reload();
-            }
-        });
-    });
-
-    // Update tracking ID on bestbuy
-    $(".btn-bestbuy-tracking ").click(function () {
-        var order_id = $(this).parent().siblings(".order_id").html();
-        $.ajax({
-            type: 'GET',
-            url: '../orders/update_tracking/' + order_id + '/'
-        }).done(function (msg) {
-            location.reload();
-            console.log(msg);
-        });
-    });
+// extra javascript lawl
 </script> {% endblock %}
