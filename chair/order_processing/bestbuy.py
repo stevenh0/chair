@@ -36,6 +36,8 @@ def load_order(order_info):
         order.received = order_info.get('created_date')
         order.order_line_id = item.get('order_line_id')
         order.shipping_type = order_info.get('shipping_type_label')
+        order.total_price = order_info.get('total_price')
+        order.bestbuy_commission = order_info.get('total_commission')
         try:
             order.part_number = PRODUCT_INFO.get(product_name)[1]
         except:
