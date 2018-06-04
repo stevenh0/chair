@@ -37,6 +37,7 @@ class Order(models.Model):
     has_report = models.BooleanField(default=False)
     total_price = models.CharField(max_length=100, blank=True, null=True)
     bestbuy_commission = models.CharField(max_length=100, blank=True, null=True)
+    uploaded = models.BooleanField(default=False)
 
 
 class Report(models.Model):

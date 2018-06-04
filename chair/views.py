@@ -3,13 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 
-from scraper.settings import BESTBUY_KEY, CARRIER_CODE
 from chair.models import Order, OrderStatus, Report
 from chair.order_processing.bestbuy import grab_orders, process_order, send_tracking_bestbuy
-from chair.order_processing.newegg import get_newegg_tracking_id, newegg_ship, get_report, parse_report
-
-import requests
-import json
+from chair.order_processing.newegg import newegg_ship, get_report, parse_report
+from chair.order_processing.google_sheets_upload import post_order_info
 import datetime
 
 
@@ -106,3 +103,15 @@ def process_report(request, report_id):
         return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
     else:
         return JsonResponse({'status': 'error', 'message': 'Report {} did not contain the necessary info at this time, try again later'.format(report_id)})
+
+
+@login_required()
+def post_gsheets(request, order_id, url):
+    try:
+        post_order_info(order_id, url)
+    except:
+        return JsonResponse({'status': 'error', 'message': 'Error in uploading order {}'.format(order_id)})
+    order = Order.objects.get(order_id=order_id)
+    order.uploaded = True
+    order.save()
+    JsonResponse({'status': 'success', 'message': 'Order {} uploaded'.format(order_id)})
