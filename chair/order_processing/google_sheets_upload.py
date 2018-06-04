@@ -2,13 +2,14 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 from chair.models import Order
+from scraper.settings import GOOGLE_CREDS
 
 
-def post_order_info(order_id):
+def post_order_info(order_id, sheets_url):
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('pulselabz.json', scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(GOOGLE_CREDS, scope)
     gc = gspread.authorize(credentials)
-    sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/1kQHu41vQ6QL1_5k-hbtPi20AI6YOKfx0lcBTlDtshD8/edit?ts=5b1455d8#gid=1703849860')
+    sheet = gc.open_by_url(sheets_url)
     worksheet = sheet.get_worksheet(0)
     next_free = len(worksheet.col_values(2)) + 1
     order = Order.objects.get(order_id=order_id)

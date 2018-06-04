@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import json
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -140,8 +141,11 @@ LOGIN_REDIRECT_URL = "/dashboard"
 #  variables
 try:
     from secrets import BESTBUY_KEY, CARRIER_CODE, NEWEGG_KEY, NEWEGG_AUTH
+    with open('pulselabz.json', 'r') as f:
+        GOOGLE_CREDS = json.load(f)
 except:
     BESTBUY_KEY = str(os.environ["BESTBUY_KEY"])
     CARRIER_CODE = str(os.environ["CARRIER_CODE"])
     NEWEGG_AUTH = str(os.environ["NEWEGG_AUTH"])
     NEWEGG_KEY = str(os.environ["NEWEGG_KEY"])
+    GOOGLE_CREDS = str(os.environ["GRDRIVE"])
