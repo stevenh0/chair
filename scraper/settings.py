@@ -148,4 +148,4 @@ except:
     CARRIER_CODE = str(os.environ["CARRIER_CODE"])
     NEWEGG_AUTH = str(os.environ["NEWEGG_AUTH"])
     NEWEGG_KEY = str(os.environ["NEWEGG_KEY"])
-    GOOGLE_CREDS = str(os.environ["GRDRIVE"])
+    GOOGLE_CREDS = str(os.environ["GDRIVE"])
