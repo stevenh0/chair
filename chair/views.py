@@ -22,9 +22,11 @@ def dashboard(request):
         Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
     pending = Order.objects.filter(
         Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING'))
+    list_of_products = OrderStatus.objects.all()
     reports = Report.objects.filter(processed=False)
     return render(request, "dashboard/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending),
-                                                                'reports': reversed(reports), 'completed_len': len(completed)})
+                                                                'reports': reversed(reports), 'completed_len': len(completed),
+                                                                'list_of_products': list_of_products})
 
 
 @login_required()
@@ -114,4 +116,20 @@ def post_gsheets(request, order_id, url):
     order = Order.objects.get(order_id=order_id)
     order.uploaded = True
     order.save()
-    JsonResponse({'status': 'success', 'message': 'Order {} uploaded'.format(order_id)})
+    return JsonResponse({'status': 'success', 'message': 'Order {} uploaded'.format(order_id)})
+
+
+@login_required()
+def enable_autofill(request, product_name):
+    product = OrderStatus.objects.get(part_number=product_name)
+    product.auto_fulfill = True
+    product.save()
+    return JsonResponse({'status': 'success', 'message': 'Autofulfil updated for {}'.format(product_name)})
+
+
+@login_required()
+def disable_autofill(request, product_name):
+    product = OrderStatus.objects.get(part_number=product_name)
+    product.auto_fulfill = False
+    product.save()
+    return JsonResponse({'status': 'success', 'message': 'Autofulfil updated for {}'.format(product_name)})

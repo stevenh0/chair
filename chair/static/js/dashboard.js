@@ -22,9 +22,15 @@ $(".on").on("change", function() {
     .html();
 
   if (this.checked) {
-    console.log(`on & ${sku_id}`);
+    $.ajax({
+      type: "GET",
+      url: "../orders/fulfill/" + sku_id + "/on"
+    });
   } else {
-    console.log(`off & ${sku_id}`);
+    $.ajax({
+      type: "GET",
+      url: "../orders/fulfill/" + sku_id + "/on"
+    });
   }
 });
 
@@ -130,4 +136,8 @@ $(".btn-bestbuy-tracking ").click(function() {
     location.reload();
     console.log(msg);
   });
+});
+
+$(".fulfill-button").click(function() {
+  $('.fulfill-settings').slideToggle(500);
 });
