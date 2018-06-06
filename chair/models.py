@@ -5,6 +5,8 @@ from django.db import models
 class OrderStatus(models.Model):
     auto_fulfill = models.BooleanField()
     last_update = models.CharField(max_length=100, blank=True, null=True)
+    product_name = models.CharField(max_length=100, blank=True, null=True)
+    part_number = models.CharField(max_length=100, blank=True, null=True)
 
 
 class Customer(models.Model):

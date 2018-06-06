@@ -7,6 +7,13 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         reports = Report.objects.filter(processed=0)
         for report in reports:
-            parse_report(report.request_id)
-        if Order.objects.filter(newegg_shipped=True, has_report=False).count() > 0:
-            get_report()
+            try:
+                parse_report(report.request_id)
+            except:
+                continue
+        needs_report = Order.objects.filter(newegg_shipped=True, has_report=False)
+        if needs_report.count() > 0:
+            request_id = get_report()
+            if 'error' not in request_id:
+                Report.objects.create(request_id=request_id, processed=0)
+                needs_report.update(has_report=True)

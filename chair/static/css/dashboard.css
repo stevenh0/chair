@@ -120,3 +120,11 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.fulfill-settings {
+  display: none;
+}
+
+.settings-title {
+  color: White;
+}

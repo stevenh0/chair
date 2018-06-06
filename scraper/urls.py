@@ -36,8 +36,14 @@ urlpatterns = [
         process_report, name='process_report'),
     url(r'^orders/update_tracking/(?P<order_id>[-_a-zA-Z0-9]+)/$',
         update_tracking, name='update_tracking'),
+<<<<<<< HEAD
     url(r'^orders/upload/(?P<order_id>[-_a-zA-Z0-9]+)/<path:url>$',
         post_gsheets, name='post_gsheets'),
+=======
+    url(r'^orders/upload/(?P<order_id>[-_a-zA-Z0-9]+)/<path:url>$', post_gsheets, name='post_gsheets'),
+    url(r'^orders/fulfill/(?P<product_name>[-_a-zA-Z0-9]+)/off$', disable_autofill, name='disable_autofill'),
+    url(r'^orders/fulfill/(?P<product_name>[-_a-zA-Z0-9]+)/on$', enable_autofill, name='enable_autofill'),
+>>>>>>> d4b10fbffa71d7b36b6c0f98b9df99b7e7d889d8
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

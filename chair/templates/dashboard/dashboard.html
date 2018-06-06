@@ -3,25 +3,31 @@
 
 <div class="landing-img noselect">
     <div class="limiter">
-
-        <div class="table-wrapper">
+        <h6 class="settings-title"><span style="padding:0 10px">Autofulfill Settings</span><button class="btn btn-light fulfill-button">Expand</button></h6>
+        <div class="table-wrapper fulfill-settings">
             <table id="stockTable" class="display">
                 <thead>
                     <tr class="stock">
-                        <th>SKU/ITEM_NAME</th>
+                        <th>ITEM NAME</th>
+                        <th>PART NUMBER</th>
                         <th>AUTO ACCEPT?</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in list_of_products %}
                     <tr>
-                        <td class="sku_id">{{ 'item.SKU' }}</td>
+                        <td>{{ item.product_name }}</td>
+                        <td class="sku_id">{{ item.part_number }}</td>
                         <!-- Toggle -->
                         <td>
                             <!-- Switch has access to SKU number on toggle -->
                             {% if item.auto_fulfill %}
                             <label class="switch">
+<<<<<<< HEAD
                                 <input class="auto_fulfill-btn" type="checkbox" checked>
+=======
+                                <input class="on" type="checkbox" {% if item.auto_fulfill %} checked {% endif %}>
+>>>>>>> d4b10fbffa71d7b36b6c0f98b9df99b7e7d889d8
                                 <div class="slider round"></div>
                             </label>
                             {% else %}
