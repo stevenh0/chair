@@ -104,7 +104,7 @@ def get_report():
             }
         }
     }
-    r = requests.post('https://api.newegg.com/marketplace/reportmgmt/report/submitrequest?sellerid=AFG1',
+    r = requests.post('https://api.newegg.com/marketplace/can/reportmgmt/report/submitrequest?sellerid=AFG1',
                       data=json.dumps(data), headers=headers)
     try:
         request_id = json.loads(r.content)['ResponseBody']['ResponseList'][0]['RequestId']
