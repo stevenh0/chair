@@ -12,9 +12,10 @@ $(document).ready(function() {
   $("#completeTable").DataTable({ order: [[0, "desc"]] });
 });
 
-// ON TOGGLE FUNCTION
-/////////////////////
-$(".on").on("change", function() {
+////////////////////////
+// ON TOGGLE FUNCTION //
+////////////////////////
+$(".auto_fulfill-btn").on("change", function() {
   var sku_id = $(this)
     .parent()
     .parent()
@@ -22,10 +23,40 @@ $(".on").on("change", function() {
     .html();
 
   if (this.checked) {
-    console.log(`on & ${sku_id}`);
+    console.log(`on for ${sku_id}`);
+    // auto_fulfill -> True
   } else {
-    console.log(`off & ${sku_id}`);
+    console.log(`off for ${sku_id}`);
+    // auto_fulfill -> False
   }
+});
+
+////////////////
+// Log Button //
+////////////////
+$(".btn-log ").click(function() {
+  var order_id = $(this)
+    .parent()
+    .siblings(".order_id")
+    .html();
+
+  // HARDCODED URL (SWITCHING SHEETS MONTHLY OMEGALUL)
+  var sheets_url =
+    "https://docs.google.com/spreadsheets/d/1kQHu41vQ6QL1_5k-hbtPi20AI6YOKfx0lcBTlDtshD8/edit?ts=5b1455d8#gid=1703849860";
+
+  console.log(`logging order ${order_id} to ${sheets_url}`);
+  $.ajax({
+    type: "GET",
+    url: "orders/upload/" + order_id + "/" + sheets_url
+  }).done(function(msg) {
+    if (msg.status == "error") {
+      alert("Error Logging Data to Google Sheets");
+    }
+    // TODO:
+    // Change order.uploaded to true
+    console.log(`succesfully logged order ${order_id}`);
+    location.reload();
+  });
 });
 
 // Accept Button
@@ -48,25 +79,6 @@ $(".btn-accept ").click(function(e) {
     location.reload();
     console.log(msg);
   });
-});
-
-// Details Button
-$(".btn-details ").click(function() {
-  var order_id = $(this)
-    .parent()
-    .siblings(".order_id")
-    .html();
-  console.log("details with... " + order_id);
-  // $.ajax({
-  //   type: 'GET',
-  //   url: '../orders/accept/' + order_id + '/',
-  //   success: function () {
-  //     console.log('success')
-  //   },
-  //   error: function () {
-  //     console.log('error')
-  //   }
-  // });
 });
 
 // Send order via newegg

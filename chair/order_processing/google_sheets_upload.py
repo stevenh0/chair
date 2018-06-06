@@ -6,8 +6,10 @@ from scraper.settings import GOOGLE_CREDS
 
 
 def post_order_info(order_id, sheets_url):
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(GOOGLE_CREDS, scope)
+    scope = ['https://spreadsheets.google.com/feeds',
+             'https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+        GOOGLE_CREDS, scope)
     gc = gspread.authorize(credentials)
     sheet = gc.open_by_url(sheets_url)
     worksheet = sheet.get_worksheet(0)
@@ -21,7 +23,8 @@ def post_order_info(order_id, sheets_url):
     worksheet.update_acell('O{}'.format(next_free), order.bestbuy_commission)
     worksheet.update_acell('Q{}'.format(next_free), 'Ground-Newegg')
     worksheet.update_acell('T{}'.format(next_free), order.tracking_id)
-    worksheet.update_acell('Y{}'.format(next_free), order.customer_id.firstname)
+    worksheet.update_acell('Y{}'.format(next_free),
+                           order.customer_id.firstname)
     worksheet.update_acell('Z{}'.format(next_free), order.customer_id.lastname)
     worksheet.update_acell('AA{}'.format(next_free), order.customer_id.phone)
     worksheet.update_acell('AB{}'.format(next_free), order.customer_id.street)

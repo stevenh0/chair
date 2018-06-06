@@ -19,10 +19,17 @@
                         <!-- Toggle -->
                         <td>
                             <!-- Switch has access to SKU number on toggle -->
+                            {% if item.auto_fulfill %}
                             <label class="switch">
-                                <input class="on" type="checkbox">
+                                <input class="auto_fulfill-btn" type="checkbox" checked>
                                 <div class="slider round"></div>
                             </label>
+                            {% else %}
+                            <label class="switch">
+                                <input class="auto_fulfill-btn" type="checkbox">
+                                <div class="slider round"></div>
+                            </label>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -147,10 +154,14 @@
                         <td style="color: #dc3545">Refused</td>
                         {% endif %} {% endif %} {% endif %} {% endif %}
 
-                        <td>
-                            <button class="btn-details btn-sm btn btn-dark " />Details
-                            <i class="fa fa-caret-down fa-fw " aria-hidden="true " />
+                        <td style="color: #28a745">
+                            {% if order.uploaded %} Logged {% else %}
+                            <button class="btn-log btn-sm btn btn-dark " />Log Order
+                            <i class="fa fa-caret-down fa-fw " aria-hidden="true " /> {% endif %}
                         </td>
+
+
+
                     </tr>
                     {% endfor %}
                 </tbody>
