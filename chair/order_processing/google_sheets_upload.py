@@ -5,13 +5,13 @@ from chair.models import Order
 from scraper.settings import GOOGLE_CREDS
 
 
-def post_order_info(order_id, sheets_url):
+def post_order_info(order_id, sheets_key):
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
         GOOGLE_CREDS, scope)
     gc = gspread.authorize(credentials)
-    sheet = gc.open_by_url(sheets_url)
+    sheet = gc.open_by_key(sheets_key)
     worksheet = sheet.get_worksheet(0)
     next_free = len(worksheet.col_values(2)) + 1
     order = Order.objects.get(order_id=order_id)

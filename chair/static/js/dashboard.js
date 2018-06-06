@@ -45,13 +45,12 @@ $(".btn-log ").click(function() {
     .html();
 
   // HARDCODED URL (SWITCHING SHEETS MONTHLY OMEGALUL)
-  var sheets_url =
-    "https://docs.google.com/spreadsheets/d/1kQHu41vQ6QL1_5k-hbtPi20AI6YOKfx0lcBTlDtshD8/edit?ts=5b1455d8#gid=1703849860";
+  var sheets_key = "1kQHu41vQ6QL1_5k-hbtPi20AI6YOKfx0lcBTlDtshD8";
 
-  console.log(`logging order ${order_id} to ${sheets_url}`);
+  console.log(`logging order ${order_id} to ${sheets_key}`);
   $.ajax({
     type: "GET",
-    url: "orders/upload/" + order_id + "/" + sheets_url
+    url: "../orders/upload/" + order_id + "/" + sheets_key
   }).done(function(msg) {
     if (msg.status == "error") {
       alert("Error Logging Data to Google Sheets");

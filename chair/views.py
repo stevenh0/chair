@@ -108,9 +108,9 @@ def process_report(request, report_id):
 
 
 @login_required()
-def post_gsheets(request, order_id, url):
+def post_gsheets(request, order_id, sheets_key):
     try:
-        post_order_info(order_id, url)
+        post_order_info(order_id, sheets_key)
     except:
         return JsonResponse({'status': 'error', 'message': 'Error in uploading order {}'.format(order_id)})
     order = Order.objects.get(order_id=order_id)
