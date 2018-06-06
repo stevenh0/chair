@@ -1,6 +1,6 @@
 from scraper.settings import BESTBUY_KEY
 from chair.product_info import PRODUCT_INFO
-from chair.models import Order, Customer
+from chair.models import Order, Customer, OrderStatus
 
 import requests
 import json
@@ -15,9 +15,12 @@ def grab_orders(date=None):
     orders = r_data.get('orders')
     if not orders:
         return 0
+    autofulfill = OrderStatus.objects.filter(auto_fulfill=True).values_list('part_number', flat=True)
     for order in orders:
         # grab necessary fields for newegg stuff and enter them into the db
         load_order(order)
+        if order.status == 'WAITING_ACCEPTANCE' and order.part_number in autofulfill:
+            process_order(order.order_id, True)
     return len(orders)
 
 

@@ -23,11 +23,7 @@
                             <!-- Switch has access to SKU number on toggle -->
                             {% if item.auto_fulfill %}
                             <label class="switch">
-<<<<<<< HEAD
-                                <input class="auto_fulfill-btn" type="checkbox" checked>
-=======
-                                <input class="on" type="checkbox" {% if item.auto_fulfill %} checked {% endif %}>
->>>>>>> d4b10fbffa71d7b36b6c0f98b9df99b7e7d889d8
+                                <input class="on auto_fulfill-btn" type="checkbox" {% if item.auto_fulfill %} checked {% endif %}>
                                 <div class="slider round"></div>
                             </label>
                             {% else %}

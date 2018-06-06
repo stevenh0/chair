@@ -23,13 +23,6 @@ $(".auto_fulfill-btn").on("change", function() {
     .html();
 
   if (this.checked) {
-<<<<<<< HEAD
-    console.log(`on for ${sku_id}`);
-    // auto_fulfill -> True
-  } else {
-    console.log(`off for ${sku_id}`);
-    // auto_fulfill -> False
-=======
     $.ajax({
       type: "GET",
       url: "../orders/fulfill/" + sku_id + "/on"
@@ -37,9 +30,8 @@ $(".auto_fulfill-btn").on("change", function() {
   } else {
     $.ajax({
       type: "GET",
-      url: "../orders/fulfill/" + sku_id + "/on"
+      url: "../orders/fulfill/" + sku_id + "/off"
     });
->>>>>>> d4b10fbffa71d7b36b6c0f98b9df99b7e7d889d8
   }
 });
 
