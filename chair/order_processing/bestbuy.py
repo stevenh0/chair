@@ -15,17 +15,15 @@ def grab_orders(date=None):
     orders = r_data.get('orders')
     if not orders:
         return 0
-    autofulfill = OrderStatus.objects.filter(auto_fulfill=True).values_list('part_number', flat=True)
     for order in orders:
         # grab necessary fields for newegg stuff and enter them into the db
         load_order(order)
-        if order.status == 'WAITING_ACCEPTANCE' and order.part_number in autofulfill:
-            process_order(order.order_id, True)
     return len(orders)
 
 
 # fill in information needed for an order
 def load_order(order_info):
+    autofulfill = OrderStatus.objects.filter(auto_fulfill=True).values_list('part_number', flat=True)
     for item in order_info.get('order_lines'):
         product_name = item.get('product_title')
         order, created = Order.objects.get_or_create(
@@ -46,6 +44,8 @@ def load_order(order_info):
         except:
             pass
         order.save()
+        if order.status == 'WAITING_ACCEPTANCE' and order.part_number in autofulfill:
+            process_order(order.order_id, True)
 
 
 def update_customer_info(customer_info):
