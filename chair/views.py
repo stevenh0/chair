@@ -103,6 +103,8 @@ def process_report(request, report_id):
     parsed = parse_report(report_id)
     if parsed > 0:
         return JsonResponse({'status': 'success', 'message': 'Report {} successfully parsed'.format(report_id)})
+    elif parsed < 0:
+        return JsonResponse({'status': 'error', 'message': 'Empty report, try requesting another'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Report {} did not contain the necessary info at this time, try again later'.format(report_id)})
 

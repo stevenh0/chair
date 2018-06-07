@@ -128,6 +128,8 @@ def parse_report(report_id):
     }
     r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
                      headers=headers, data=json.dumps(data))
+    if not int(json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount']):
+        return -1
     any_left_unparsed = False
     orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
     for order in orders:
