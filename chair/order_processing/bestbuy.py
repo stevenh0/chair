@@ -45,7 +45,7 @@ def load_order(order_info):
             pass
         order.save()
         if order.status == 'WAITING_ACCEPTANCE' and order.part_number in autofulfill:
-            process_order(order.order_id, True)
+            process_order(order, True)
 
 
 def update_customer_info(customer_info):
