@@ -90,7 +90,8 @@ def get_shipping_type(order):
 
 
 # request report to get shipping id
-def get_report():
+# type should be 0 for unshipped reports (initial) or 2 for shipped reports (notice somethings wrong)
+def get_report(type):
     headers = {'Authorization': NEWEGG_AUTH, 'SecretKey': NEWEGG_KEY,
                'Content-Type': 'application/json', 'Accept': 'application/json'}
     data = {
@@ -99,7 +100,7 @@ def get_report():
             "OrderReportCriteria": {
                 "RequestType": "ORDER_LIST_REPORT",
                 "KeywordsType": "0",
-                "Status": "0",
+                "Status": str(type),
                 "Type": "0",
             }
         }
@@ -114,6 +115,7 @@ def get_report():
 
 
 def parse_report(report_id):
+    report = Report.objects.get(request_id=report_id)
     headers = {'Authorization': NEWEGG_AUTH, 'SecretKey': NEWEGG_KEY,
                'Content-Type': 'application/json', 'Accept': 'application/json'}
     data = {
@@ -129,6 +131,8 @@ def parse_report(report_id):
     r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
                      headers=headers, data=json.dumps(data))
     if not int(json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount']):
+        report.processed = True
+        report.save()
         return -1
     any_left_unparsed = False
     orders = json.loads(r.content)['ResponseBody']['OrderInfoList']
@@ -150,7 +154,6 @@ def parse_report(report_id):
         except:
             any_left_unparsed = True
     if not any_left_unparsed or json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount'] == 0:
-        report = Report.objects.get(request_id=report_id)
         report.processed = True
         report.save()
         return 1

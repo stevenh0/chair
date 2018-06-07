@@ -93,7 +93,9 @@ def update_tracking(request, order_id):
 
 @login_required()
 def get_newegg_report(request):
-    report_id = get_report()
+    report_id = get_report(0)
+    report, _ = Report.objects.get_or_create(request_id=report_id)
+    report_id = get_report(2)
     report, _ = Report.objects.get_or_create(request_id=report_id)
     return JsonResponse({'status': 'success', 'message': 'Report successfully requested'})
 

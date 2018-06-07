@@ -13,7 +13,7 @@ class Command(BaseCommand):
                 continue
         needs_report = Order.objects.filter(newegg_shipped=True, has_report=False)
         if needs_report.count() > 0:
-            request_id = get_report()
+            request_id = get_report(0)
             if 'error' not in request_id:
                 Report.objects.create(request_id=request_id, processed=0)
                 needs_report.update(has_report=True)

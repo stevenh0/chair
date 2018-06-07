@@ -121,11 +121,11 @@ $(".btn-parse-report ").click(function() {
     type: "GET",
     url: "../orders/parse_report/" + report_id + "/",
     error: function() {
-      alert("Report not ready, or did not contain necessary info");
+      alert(msg.message);
     }
   }).done(function(msg) {
     if (msg.status == "error") {
-      alert("Report not ready, or did not contain necessary info");
+      alert(msg.message);
     } else {
       location.reload();
     }
