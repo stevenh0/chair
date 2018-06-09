@@ -3,13 +3,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 from chair.models import Order
 from scraper.settings import GOOGLE_CREDS
+import json
 
 
 def post_order_info(order_id, sheets_key):
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
-        GOOGLE_CREDS, scope)
+        json.loads(GOOGLE_CREDS), scope)
     gc = gspread.authorize(credentials)
     sheet = gc.open_by_key(sheets_key)
     worksheet = sheet.get_worksheet(0)
