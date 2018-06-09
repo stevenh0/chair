@@ -17,7 +17,7 @@ import datetime
 def dashboard(request):
     date = (datetime.date.today() -
             datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
-    # grab_orders(date)
+    grab_orders(date)
     completed = Order.objects.filter(
         Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
     pending = Order.objects.filter(
