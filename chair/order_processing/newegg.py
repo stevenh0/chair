@@ -130,12 +130,7 @@ def parse_report(report_id):
     }
     r = requests.put('https://api.newegg.com/marketplace/can/reportmgmt/report/result?sellerid=AFG1&version=305',
                      headers=headers, data=json.dumps(data))
-    try:
-        if not int(json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount']):
-            report.processed = True
-            report.save()
-            return -1
-    except TypeError:
+    if r.status_code == 400 or not int(json.loads(r.content)['ResponseBody']['PageInfo']['TotalCount']):
         report.processed = True
         report.save()
         return -1
