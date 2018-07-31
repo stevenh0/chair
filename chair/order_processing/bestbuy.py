@@ -24,11 +24,11 @@ def grab_orders(date=None):
 # fill in information needed for an order
 def load_order(order_info):
     autofulfill = OrderStatus.objects.filter(auto_fulfill=True).values_list('part_number', flat=True)
+    customer = update_customer_info(order_info.get('customer'))
     for item in order_info.get('order_lines'):
         product_name = item.get('product_title')
         order, created = Order.objects.get_or_create(
             order_id=order_info.get('order_id'), product_name=product_name)
-        customer = update_customer_info(order_info.get('customer'))
         order.customer_id = customer
         order.status = order_info.get('order_state')
         if order_info.get('shipping_tracking'):
@@ -39,6 +39,7 @@ def load_order(order_info):
         order.shipping_type = order_info.get('shipping_type_label')
         order.total_price = order_info.get('total_price')
         order.bestbuy_commission = order_info.get('total_commission')
+        order.source = "bestbuy"
         try:
             order.part_number = PRODUCT_INFO.get(product_name)[1]
         except:
