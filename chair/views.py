@@ -24,7 +24,7 @@ def dashboard(request):
         Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING') | Q(status='SHIPPED'))
     list_of_products = OrderStatus.objects.all()
     reports = Report.objects.filter(processed=False)
-    print(pending)
+    # print(pending)
     return render(request, "dashboard/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending),
                                                                 'reports': reversed(reports), 'completed_len': len(completed),
                                                                 'list_of_products': list_of_products})

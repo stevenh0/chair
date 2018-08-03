@@ -6,3 +6,6 @@ myvenv
 db.sqlite3
 .DS_Store
 secrets.py
+
+client_secret.json
+pulselabz.json

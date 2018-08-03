@@ -1,15 +1,30 @@
 $(document).ready(function() {
   $("#stockTable").DataTable({ order: [[0, "desc"]] });
-});
-$(document).ready(function() {
   $("#pendingTable").DataTable({ order: [[0, "desc"]] });
-});
-$(document).ready(function() {
   $("#reportTable").DataTable({ order: [[0, "desc"]] });
+  $("#completeTable").DataTable({ order: [[0, "desc"]] });
 });
 
-$(document).ready(function() {
-  $("#completeTable").DataTable({ order: [[0, "desc"]] });
+// btn-mark-as-fulfilled
+$(".btn-mark-as-fulfilled").click(function() {
+  var order_id = $(this)
+    .parent()
+    .siblings(".order_id")
+    .html();
+
+  console.log(order_id)
+  // $.ajax({
+  //   type: "GET",
+  //   url: "../orders/upload/" + order_id + "/" + sheets_key
+  // }).done(function(msg) {
+  //   if (msg.status == "error") {
+  //     alert("Error Logging Data to Google Sheets");
+  //   }
+  //   // TODO:
+  //   // Change order.uploaded to true
+  //   console.log(`succesfully logged order ${order_id}`);
+  //   location.reload();
+  // });
 });
 
 ////////////////////////
