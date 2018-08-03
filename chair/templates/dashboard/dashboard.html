@@ -71,6 +71,7 @@
                         {% if order.customer_id.state == 'BC' %}
                             <td style="color: #28a745">{{ order.customer_id.city }}<i class="fa fa-home fa-fw" aria-hidden="true"/></td>
                         {% else %}
+<<<<<<< HEAD
                             <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
                         {% endif %} 
 
@@ -108,6 +109,22 @@
                                 <td><button class="btn-send btn-sm btn btn-primary"/>Send<i class="fa fa-send fa-fw" aria-hidden="true"/></td>
                                 {% endif %}
                             {% endif %} 
+=======
+                        <td>{{ order.customer_id.city }}, {{ order.customer_id.state }}</td>
+                        {% endif %}
+                        {% if order.status == 'SHIPPING' or order.status == 'SHIPPED' %}
+                        {% if order.newegg_shipped %}
+                        <td>Shipped</td>
+                        <td>{% if not order.tracking_id %} None {% else %}{{ order.tracking_id }} {% endif %}</td>
+                        <td>
+                            {% if not order.tracking_id %}
+                            <button class="btn btn-sm btn-details btn-report btn-primary">Get Tracking</button>
+                            {% elif not order.bestbuy_filled and order.source != 'woocommerce' %}
+                            <button class="btn btn-sm btn-details btn-bestbuy-tracking btn-primary">Update Bestbuy</button>
+                            {% else %}  <button class="btn-log btn-sm btn btn-dark " />Log Order
+                            <i class="fa fa-database fa-fw " aria-hidden="true " />  {% endif %}
+                        </td>
+>>>>>>> 12f226f08fba9321152e9c3fa657f0a34a6f0f9c
                         {% else %}
                             <!-- Status -->
                             {% if order.status == 'WAITING_ACCEPTANCE' %}
