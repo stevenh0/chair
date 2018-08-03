@@ -7,6 +7,7 @@ from chair.models import Order, OrderStatus, Report
 from chair.order_processing.bestbuy import grab_orders, process_order, send_tracking_bestbuy
 from chair.order_processing.newegg import newegg_ship, get_report, parse_report
 from chair.order_processing.google_sheets_upload import post_order_info
+from chair.order_processing.woocommerce import grab_orders_woocommerce
 import datetime
 
 
@@ -18,6 +19,7 @@ def dashboard(request):
     date = (datetime.date.today() -
             datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     grab_orders(date)
+    grab_orders_woocommerce()
     completed = Order.objects.filter(
         Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
     pending = Order.objects.filter(

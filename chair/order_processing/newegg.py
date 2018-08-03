@@ -76,6 +76,8 @@ def get_newegg_order(order):
 
 
 def get_shipping_type(order):
+    if order.source == 'woocommerce':
+        shipping = "CAN Ground (2-7 Business Days)"
     if order.customer_id.country == 'Canada':
         if 'Express' in order.shipping_type:
             shipping = "CAN Express (2-5 Business Days)"
@@ -147,10 +149,11 @@ def parse_report(report_id):
             cur_order.carrier_code = carrier
             cur_order.tracking_id = tracking_id
             cur_order.save()
-            processed = send_tracking_bestbuy(cur_order)
-            if processed > 0:
-                cur_order.bestbuy_filled = True
-                cur_order.save()
+            if cur_order.source == 'bestbuy':
+                processed = send_tracking_bestbuy(cur_order)
+                if processed > 0:
+                    cur_order.bestbuy_filled = True
+                    cur_order.save()
         except:
             any_left_unparsed = True
     if not any_left_unparsed:
