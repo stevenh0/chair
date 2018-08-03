@@ -28,18 +28,19 @@ def load_order_wc(order_info):
         product_name = item.get('name')
         order, created = Order.objects.get_or_create(
             order_id=order_info.get('order_key'), product_name=product_name)
-        order.customer_id = customer
-        order.status = "SHIPPING"
-        order.part_number = item.get('sku')
-        order.quantity = item.get('quantity')
-        order.received = order_info.get('date_created')
-        order.shipping_type = order_info.get('shipping_lines')[i].get('method_title')
-        order.total_price = order_info.get('total')
-        order.source = "woocommerce"
-        try:
-            order.part_number = PRODUCT_INFO.get(product_name)[1]
-        except:
-            pass
+        if created:
+            order.customer_id = customer
+            order.status = "SHIPPING"
+            order.part_number = item.get('sku')
+            order.quantity = item.get('quantity')
+            order.received = order_info.get('date_created')
+            order.shipping_type = order_info.get('shipping_lines')[i].get('method_title')
+            order.total_price = order_info.get('total')
+            order.source = "woocommerce"
+            try:
+                order.part_number = PRODUCT_INFO.get(product_name)[1]
+            except:
+                pass
         order.save()
 
 
