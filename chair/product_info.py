@@ -1,6 +1,7 @@
 # Product SKU? : (product name, newegg part #)
 PRODUCT_INFO = {
     "PulseLabz Guardian Series Gaming Chair - Black/Black": ("9SIAFG16RF1304", "G-BK"),
+    "PulseLabz Guardian Series Office Gaming Chair - Black/Black": ("9SIAFG16RF1304", "G-BK"),
     "PulseLabz Guardian Series Gaming Chair - White/Black": ("9SIAFG16RF1303", "G-W"),
     "PulseLabz Guardian Series Gaming Chair - Blue/Black": ("9SIAFG16RF1302", "G-B"),
     "PulseLabz Guardian Series Gaming Chair - Red/Black": ("9SIAFG16RF1269", "G-R"),

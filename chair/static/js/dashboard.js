@@ -60,9 +60,8 @@ $(".btn-log ").click(function() {
     .html();
 
   // HARDCODED URL (SWITCHING SHEETS MONTHLY OMEGALUL)
-  var sheets_key = "1kQHu41vQ6QL1_5k-hbtPi20AI6YOKfx0lcBTlDtshD8";
+  var sheets_key = "1oUFGr3gqwlvj-tpTjH1NsC9ptKBqD2c8GljXUWA44Zs";
 
-  console.log(`logging order ${order_id} to ${sheets_key}`);
   $.ajax({
     type: "GET",
     url: "../orders/upload/" + order_id + "/" + sheets_key
