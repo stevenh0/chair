@@ -10,6 +10,7 @@ PRODUCT_INFO = {
     "PulseLabz Enforcer Series Gaming Chair - Blue/Black": ("9SIAFG16RE9291", "E-B"),
     "PulseLabz Enforcer Series Gaming Chair - Red/Black": ("9SIAFG16RE9105", "E-R"),
     "PulseLabz Challenger Series Gaming Chair - Black/Black": ("9SIAFG16RE9054", "C-BK"),
+    "PulseLabz Challenger Series Office Gaming Chair - Black/Black": ("9SIAFG16RE9054", "C-BK"),
     "PulseLabz Challenger Series Gaming Chair - White/Black": ("9SIAFG16RE8116", "C-W"),
     "PulseLabz Challenger Series Gaming Chair - Blue/Black": ("9SIAFG16RE8111", "C-B"),
     "PulseLabz Challenger Series Gaming Chair - Red/Black": ("9SIAFG16R80209", "C-R"),
