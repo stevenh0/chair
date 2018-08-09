@@ -27,7 +27,7 @@ def load_order_wc(order_info):
         item = order_info.get('line_items')[i]
         product_name = item.get('name')
         order, created = Order.objects.get_or_create(
-            order_id=order_info.get('order_key'), product_name=product_name)
+            order_id=order_info.get('number'), product_name=product_name)
         if created:
             order.customer_id = customer
             order.status = "SHIPPING"
