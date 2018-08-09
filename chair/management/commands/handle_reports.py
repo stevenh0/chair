@@ -11,7 +11,7 @@ class Command(BaseCommand):
                 parse_report(report.request_id)
             except:
                 continue
-        needs_report = Order.objects.filter(newegg_shipped=True, has_report=False)
+        needs_report = Order.objects.filter(newegg_shipped=True, has_report=False).exclude(status='RECEIVED')
         if needs_report.count() > 0:
             request_id = get_report(0)
             if 'error' not in request_id:
