@@ -20,7 +20,11 @@ def post_order_info(order_id, sheets_key):
     worksheet.update_acell('B{}'.format(next_free), today)
     worksheet.update_acell('D{}'.format(next_free), order.part_number)
     worksheet.update_acell('L{}'.format(next_free), order.total_price)
-    worksheet.update_acell('F{}'.format(next_free), order.customer_id.state)
+    if order.customer_id.state == 'BC':
+        worksheet.update_acell('F{}'.format(next_free), 'BC Retail')
+    else:
+        worksheet.update_acell('F{}'.format(next_free), order.customer_id.state)
+    worksheet.update_acell('N{}'.format(next_free), order.source.title())
     worksheet.update_acell('O{}'.format(next_free), order.bestbuy_commission)
     worksheet.update_acell('Q{}'.format(next_free), 'Ground-Newegg')
     worksheet.update_acell('T{}'.format(next_free), order.tracking_id)
