@@ -38,6 +38,7 @@ def grab_latest_orders(request):
     date = (datetime.date.today() -
             datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     updated = grab_orders(date)
+    grab_orders_woocommerce()
     settings.last_update = datetime.date.today().strftime('%Y-%m-%d')
     settings.save()
     if updated > 0:
@@ -140,3 +141,14 @@ def disable_autofill(request, product_name):
     product.auto_fulfill = False
     product.save()
     return JsonResponse({'status': 'success', 'message': 'Autofulfil updated for {}'.format(product_name)})
+
+
+@login_required()
+def mark_fulfilled(request, order_id):
+    try:
+        order = Order.objects.get(order_id=order_id)
+        order.bestbuy_filled = True
+        order.save()
+        return JsonResponse({'status': 'success', 'message': 'Order {} marked as fulfilled'.format(order_id)})
+    except:
+        return JsonResponse({'status': 'failure', 'message': 'Order {} does not exist'.format(order_id)})

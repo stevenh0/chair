@@ -61,3 +61,4 @@ def update_customer_info_wc(customer_id, billing_info, customer_info):
             customer.customer_id, customer_info))
     customer.save()
     return customer
+
