@@ -12,4 +12,4 @@ def date_formater(date_tz):
         # Some dates are missing 'Z'
         datetime_object = datetime.strptime(date_tz, "%Y-%m-%dT%H:%M:%S")
     finally:
-        return datetime_object.strftime("%Y-%m-%d %H:%M:%S")
+        return datetime_object.strftime("%Y-%m-%d %H:%M")
