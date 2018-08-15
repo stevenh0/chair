@@ -19,7 +19,10 @@ def post_order_info(order_id, sheets_key):
     today = datetime.datetime.today().strftime('%B %d')
     worksheet.update_acell('B{}'.format(next_free), today)
     worksheet.update_acell('D{}'.format(next_free), order.part_number)
-    worksheet.update_acell('L{}'.format(next_free), order.total_price)
+    if order.source == 'woocommerce':
+        worksheet.update_acell('E{}'.format(next_free), order.total_price)
+    else:
+        worksheet.update_acell('L{}'.format(next_free), order.total_price)
     if order.customer_id.state == 'BC':
         worksheet.update_acell('F{}'.format(next_free), 'BC Retail')
     else:

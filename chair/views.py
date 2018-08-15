@@ -21,13 +21,13 @@ def dashboard(request):
     grab_orders(date)
     grab_orders_woocommerce()
     completed = Order.objects.filter(
-        Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED'))
+        Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED')).order_by('-received')
     pending = Order.objects.filter(
-        Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING') | Q(status='SHIPPED'))
+        Q(status='WAITING_ACCEPTANCE') | Q(status='WAITING_DEBIT_PAYMENT') | Q(status='SHIPPING') | Q(status='SHIPPED')).order_by('-received')
     list_of_products = OrderStatus.objects.all()
     reports = Report.objects.filter(processed=False)
     # print(pending)
-    return render(request, "dashboard/dashboard.html", context={'completed': reversed(completed), 'pending': reversed(pending),
+    return render(request, "dashboard/dashboard.html", context={'completed': completed, 'pending': pending,
                                                                 'reports': reversed(reports), 'completed_len': len(completed),
                                                                 'list_of_products': list_of_products})
 
