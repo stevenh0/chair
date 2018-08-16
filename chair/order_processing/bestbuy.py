@@ -60,6 +60,8 @@ def update_customer_info(customer_info):
         customer.phone = customer_info['shipping_address'].get('phone')
         customer.state = customer_info['shipping_address'].get('state')
         customer.street = customer_info['shipping_address'].get('street_1')
+        if customer_info.get('address_2'):
+            customer.street = '{} - {}'.format(customer_info['shipping_address'].get('street_2'), customer_info['shipping_address'].get('street_1'))
         customer.zip = customer_info['shipping_address'].get('zip_code')
     except AttributeError:
         print('could not parse customer {}, {}'.format(
