@@ -1,8 +1,8 @@
 $(document).ready(function() {
   $("#stockTable").DataTable({ order: [[0, "desc"]] });
-  $("#pendingTable").DataTable({ order: [[0, "desc"]] });
+  $("#pendingTable").DataTable({ order: [[1, "desc"]] });
   $("#reportTable").DataTable({ order: [[0, "desc"]] });
-  $("#completeTable").DataTable({ order: [[0, "desc"]] });
+  $("#completeTable").DataTable({ order: [[1, "desc"]] });
 });
 
 // btn-mark-as-fulfilled

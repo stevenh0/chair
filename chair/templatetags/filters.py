@@ -5,8 +5,11 @@ register = template.Library()
 
 
 @register.filter
-def date_formater(date_tz, include_how_long_ago=False):
+def date_formater(date_tz):
     try:
-        return datetime.strptime(date_tz, "%Y-%m-%dT%H:%M:%SZ")
-    except:
-        return datetime.strptime(date_tz, "%Y-%m-%dT%H:%M:%S")
+        datetime_object = datetime.strptime(date_tz, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError: 
+        # Some dates are missing 'Z'
+        datetime_object = datetime.strptime(date_tz, "%Y-%m-%dT%H:%M:%S")
+    finally:
+        return datetime_object.strftime("%Y-%m-%d %H:%M")
