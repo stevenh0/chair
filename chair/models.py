@@ -19,6 +19,7 @@ class Customer(models.Model):
     state = models.CharField(max_length=100, blank=True, null=True)
     street = models.CharField(max_length=100, blank=True, null=True)
     zip = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=100, blank=True, null=True)
 
 
 class Order(models.Model):

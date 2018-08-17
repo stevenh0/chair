@@ -45,3 +45,4 @@ def post_order_info(order_id, sheets_key):
     worksheet.update_acell('AD{}'.format(next_free), order.customer_id.city)
     worksheet.update_acell('AE{}'.format(next_free), order.customer_id.state)
     worksheet.update_acell('X{}'.format(next_free), order.order_id)
+    worksheet.update_acell('AF{}'.format(next_free), order.customer_id.email)
