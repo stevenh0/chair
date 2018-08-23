@@ -16,10 +16,10 @@ import datetime
 # have to parse newegg_feed to get tracking_id -> update tracking_id on bestbuy side
 @login_required()
 def dashboard(request):
-    date = (datetime.date.today() -
-            datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
-    grab_orders(date)
-    grab_orders_woocommerce()
+    # date = (datetime.date.today() -
+    #         datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    # grab_orders(date)
+    # grab_orders_woocommerce()
     completed = Order.objects.filter(
         Q(status='RECEIVED') | Q(status='CANCELLED') | Q(status='REFUSED') | Q(status='CLOSED')).order_by('-received')
     pending = Order.objects.filter(
