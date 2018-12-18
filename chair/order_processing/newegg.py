@@ -19,6 +19,7 @@ def newegg_ship(order):
         order.newegg_feed = feed_id
         order.newegg_shipped = True
         order.save()
+    print("Order response form newegg", r.content)
     except:
         return {'error': 'shipping failed for order {}'.format(order.order_id)}
     return {'success': 'shipping succeeded for order {}'.format(order.order_id)}
@@ -160,4 +161,5 @@ def parse_report(report_id):
         report.processed = True
         report.save()
         return 1
+    print("Report response from newegg", r.content)
     return 0
