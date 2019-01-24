@@ -17,5 +17,6 @@ PRODUCT_INFO = {
     "PulseLabz Challenger Series Gaming Chair - Red/Black": ("9SIAFG16R80209", "C-R"),
     "PulseLabz Challenger Series Gaming Chair (W-trim) - White/Black": ('', "C-W"),
     "PulseLabz Challenger Series Gaming Chair - Green/Black": ('', "C-G"),
-    "PulseLabz Challenger Series Gaming Chair - Orange/Black": ('', "C-O")
+    "PulseLabz Challenger Series Gaming Chair - Orange/Black": ('', "C-O"),
+    "Pulselabz Weapon Series Mousepad": ("9SIAFG180E0723","MP-L")
 }
